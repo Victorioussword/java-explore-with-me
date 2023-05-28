@@ -21,11 +21,13 @@ import java.util.List;
 public class StatController {
     private final StatService statService;
 
+
     @PostMapping("/hit")
     public OutputHitDto postHit(@Valid @RequestBody InputHitDto inputHitDto) {
         log.info("StatController - postHit(). Создан {}", inputHitDto.toString());
         return statService.postHit(inputHitDto);
     }
+
 
     @GetMapping("/stats")
     public List<ViewStat> geStat(
