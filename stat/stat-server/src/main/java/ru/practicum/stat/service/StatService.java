@@ -29,11 +29,11 @@ public class StatService {
 
     public List<ViewStat> getStat(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
 
-        if (unique || uris.size() >= 1) {
+        if (unique && !uris.isEmpty()) {
             return statRepository.getStatUniqueIpUris(start, end, uris);  // уникальный IP, список ссылок есть
-        } else if (unique || uris.isEmpty()) {
+        } else if (unique && uris.isEmpty()) {
             return statRepository.getStatUniqueIpNoUris(start, end);  // // уникальный IP, список ссылок нет
-        } else if (!unique || uris.size() >= 1) {
+        } else if (!unique && !uris.isEmpty()) {
             return statRepository.getStatUnUniqueIpUris(start, end, uris);  // не уникальный IP, список ссылок есть
         } else {
             return statRepository.getStatUnUniqueIpNoUris(start, end);  // не уникальный IP, список ссылок нет

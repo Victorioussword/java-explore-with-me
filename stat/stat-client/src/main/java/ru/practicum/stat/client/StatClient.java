@@ -17,7 +17,7 @@ import java.util.Map;
 
 
 @Service
-public class StatClient  extends BaseClient{
+public class StatClient  extends BaseClient {
 
     private static final String API_PREFIX = "/bookings";
 
@@ -31,7 +31,7 @@ public class StatClient  extends BaseClient{
         );
     }
 
-    public ResponseEntity<Object> postHit (String app, String uri, String ip, LocalDateTime timestamp) {
+    public ResponseEntity<Object> postHit(String app, String uri, String ip, LocalDateTime timestamp) {
         InputHitDto inputHitDto = new InputHitDto(app, uri, ip, timestamp);
         return post("/hit", inputHitDto);
     }
