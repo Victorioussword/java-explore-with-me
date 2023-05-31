@@ -36,7 +36,6 @@ public class InputHitDto {
 
     @NotNull
     @NotBlank
-
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime timestamp;
 
