@@ -48,26 +48,3 @@ public interface StatRepository extends JpaRepository<Hit, Long> {
             "order by count(hit.ip) desc")
     List<ViewStat> getStatUnUniqueIpNoUris(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
 }
-
-//    String app;
-//    String uri;
-//    String hits;
-
-//public class Hit {
-//    Long id;
-//    String app;
-//    String uri;
-//    String ip;
-//    LocalDateTime timestamp;
-
-//@Query("select booking from Booking booking " +
-//        "where booking.start < ?2 " +
-//        "and booking.end > ?2 " +
-//        "and booking.item.owner = ?1 " +
-//        "order by booking.start desc")
-
-//@Query("select i " +
-//        "from Item i " +
-//        "where (lower(i.name) like lower(concat('%', ?1, '%')) " +
-//        "or lower(i.description) like lower(concat('%', ?1, '%'))) " +
-//        "and i.available is true ")

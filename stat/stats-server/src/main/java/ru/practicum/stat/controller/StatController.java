@@ -24,7 +24,7 @@ public class StatController {
 
     @PostMapping("/hit")
     public OutputHitDto postHit(@Valid @RequestBody InputHitDto inputHitDto) {
-//        log.info("StatController - postHit(). Создан {}", inputHitDto.toString());
+        log.info("StatController - postHit(). Создан {}", inputHitDto.toString());
         return statService.postHit(inputHitDto);
     }
 

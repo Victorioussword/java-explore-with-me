@@ -17,7 +17,7 @@ import java.util.Map;
 
 public class StatClient  extends BaseClient {
 
-    private static final String API_PREFIX = "/bookings";
+    private static final String API_PREFIX = "/hit";
 
     @Autowired
     public StatClient(@Value("http://localhost:9090") String serverUrl, RestTemplateBuilder builder) {
@@ -57,15 +57,4 @@ public class StatClient  extends BaseClient {
 
         return get(uriBuilder.toString(), parameters);
     }
-
-//    public static final String DT_FORMAT = "yyyy-MM-dd HH:mm:ss";
-//    public static final DateTimeFormatter DT_FORMATTER = DateTimeFormatter.ofPattern(DT_FORMAT);
-//    public static final String HIT_ENDPOINT = "/hit";
-//    public static final String STATS_ENDPOINT = "/stats";
-
-//    String app;
-//    String uri;
-//    String ip;
-//   LocalDateTime timestamp;
-
 }
