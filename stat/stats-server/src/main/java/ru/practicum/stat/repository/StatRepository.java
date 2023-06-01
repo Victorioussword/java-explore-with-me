@@ -37,7 +37,7 @@ public interface StatRepository extends JpaRepository<Hit, Long> {
             "where (hit.timestamp between :start and :end) " +
             "and hit.uri IN (:uris) " +
             "group by hit.app, hit.uri " +
-            "order by count(distinct hit.ip) desc")
+            "order by count(hit.ip) desc")
     List<ViewStat> getStatUnUniqueIpUris(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end, @Param("uris") List<String> uris);
 
 
@@ -45,7 +45,7 @@ public interface StatRepository extends JpaRepository<Hit, Long> {
             "from Hit hit " +
             "where (hit.timestamp between :start and :end) " +
             "group by hit.app, hit.uri " +
-            "order by count(distinct hit.ip) desc")
+            "order by count(hit.ip) desc")
     List<ViewStat> getStatUnUniqueIpNoUris(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
 }
 
