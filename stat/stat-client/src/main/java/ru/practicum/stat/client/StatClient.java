@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.stereotype.Service;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 
 import ru.practicum.stat.dto.InputHitDto;
@@ -16,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 
 
-@Service
 public class StatClient  extends BaseClient {
 
     private static final String API_PREFIX = "/bookings";

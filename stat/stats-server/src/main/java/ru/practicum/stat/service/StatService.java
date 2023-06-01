@@ -21,6 +21,7 @@ public class StatService {
 
     private final StatRepository statRepository;
 
+    @Transactional
     public OutputHitDto postHit(InputHitDto inputHitDto) {
         log.info("StatService - postHit(). Создан {}", inputHitDto.toString());
         return HitMapper.toOutputHitDto(statRepository.save(HitMapper.toHit(inputHitDto)));
