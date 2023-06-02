@@ -5,13 +5,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import ru.practicum.stat.model.Hit;
-import org.springframework.stereotype.Repository;
 import ru.practicum.stat.model.ViewStat;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Repository
 public interface StatRepository extends JpaRepository<Hit, Long> {
 
 

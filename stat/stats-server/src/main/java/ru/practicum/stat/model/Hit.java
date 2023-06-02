@@ -18,17 +18,17 @@ public class Hit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
 
     @Column(nullable = false, name = "app")
-    String app;
+    private String app;
 
     @Column(nullable = false, name = "uri")
-    String uri;
+    private String uri;
 
     @Column(nullable = false, name = "ip")
-    String ip;
+    private String ip;
 
     @Column(nullable = false, name = "timestamp")
-    LocalDateTime timestamp;
+    private LocalDateTime timestamp;
 }

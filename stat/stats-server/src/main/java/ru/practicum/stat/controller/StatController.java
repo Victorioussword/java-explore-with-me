@@ -18,9 +18,9 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping()
-@Validated
 public class StatController {
     private final StatService statService;
+    private static final String FORMATTER  = "yyyy-MM-dd HH:mm:ss";
 
     @PostMapping("/hit")
     public OutputHitDto postHit(@Valid @RequestBody InputHitDto inputHitDto) {
@@ -31,8 +31,8 @@ public class StatController {
 
     @GetMapping("/stats")
     public List<ViewStat> geStat(
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime start,
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime end,
+            @RequestParam @DateTimeFormat(pattern = FORMATTER) LocalDateTime start,
+            @RequestParam @DateTimeFormat(pattern = FORMATTER) LocalDateTime end,
             @RequestParam(required = false) List<String> uris,
             @RequestParam(defaultValue = "false") boolean unique
     ) {

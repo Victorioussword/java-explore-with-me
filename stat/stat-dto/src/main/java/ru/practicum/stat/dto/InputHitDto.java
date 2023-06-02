@@ -17,20 +17,15 @@ import java.time.LocalDateTime;
 public class InputHitDto {
 
 
-    @NotNull
     @NotBlank
     private String app;
 
-    @NotNull
     @NotBlank
     private String uri;
 
-    @NotNull
     @NotBlank
     private String ip;
 
-    @NotNull
-    @NotBlank
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime timestamp;
 }
