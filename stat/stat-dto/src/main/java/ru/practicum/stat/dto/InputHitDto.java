@@ -1,8 +1,9 @@
 package ru.practicum.stat.dto;
 
-import com.sun.istack.NotNull;
 import lombok.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.experimental.FieldDefaults;
 import java.time.LocalDateTime;

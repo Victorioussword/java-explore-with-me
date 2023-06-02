@@ -18,9 +18,10 @@ import java.util.Map;
 public class StatClient  extends BaseClient {
 
     private static final String API_PREFIX = "/hit";
+private static final String FORMATTER  = "yyyy-MM-dd HH:mm:ss";
 
     @Autowired
-    public StatClient(@Value("http://localhost:9090") String serverUrl, RestTemplateBuilder builder) {
+    public StatClient(@Value("${stats-server.url}") String serverUrl, RestTemplateBuilder builder) {
         super(
                 builder
                         .uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl + API_PREFIX))
@@ -42,8 +43,8 @@ public class StatClient  extends BaseClient {
 
         StringBuilder uriBuilder = new StringBuilder("/stats?start={start}&end={end}");
         Map<String, Object> parameters = Map.of(
-                "start", start.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
-                "end", end.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+                "start", start.format(DateTimeFormatter.ofPattern(FORMATTER)),
+                "end", end.format(DateTimeFormatter.ofPattern(FORMATTER))
         );
 
         if (uris != null && !uris.isEmpty()) {
