@@ -15,10 +15,11 @@ import java.util.List;
 import java.util.Map;
 
 
-public class StatClient  extends BaseClient {
+public class StatClient extends BaseClient {
 
     private static final String API_PREFIX = "/hit";
-private static final String FORMATTER  = "yyyy-MM-dd HH:mm:ss";
+    private final  DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
 
     @Autowired
     public StatClient(@Value("${stats-server.url}") String serverUrl, RestTemplateBuilder builder) {
@@ -43,8 +44,8 @@ private static final String FORMATTER  = "yyyy-MM-dd HH:mm:ss";
 
         StringBuilder uriBuilder = new StringBuilder("/stats?start={start}&end={end}");
         Map<String, Object> parameters = Map.of(
-                "start", start.format(DateTimeFormatter.ofPattern(FORMATTER)),
-                "end", end.format(DateTimeFormatter.ofPattern(FORMATTER))
+                "start", start.format(formatter),
+                "end", end.format(formatter)
         );
 
         if (uris != null && !uris.isEmpty()) {
