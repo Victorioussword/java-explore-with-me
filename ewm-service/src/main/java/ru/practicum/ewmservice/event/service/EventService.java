@@ -108,7 +108,8 @@ public class EventService {
                                             String start,
                                             String end,
                                             boolean available,
-                                            EventSort sort, int from,
+                                            EventSort sort,
+                                            int from,
                                             int size,
                                             HttpServletRequest request) {
 
@@ -144,7 +145,7 @@ public class EventService {
                         "/events/" + e.getId(),
                         false)))
                 .collect(Collectors.toList());
-        if (sort.equals("VIEWS")) {
+        if (sort.equals(EventSort.VIEWS)) {
             eventShorts.stream()
                     .sorted(Comparator.comparing(OutputEventShortDto::getViews));
         }
@@ -313,15 +314,11 @@ public class EventService {
         if (event.getState().equals(State.PUBLISHED) || event.getState().equals(State.CANCELED)) {
             throw new ValidationException("Обновление не доступно");
         }
-        //   event = prepareEvent(updateEventByAdminDto, event);
 
-
-        /////////////
         if (updateEventByAdminDto.getAnnotation() != null) {
             event.setAnnotation(updateEventByAdminDto.getAnnotation());
         }
         if (updateEventByAdminDto.getCategory() != null) {
-
 
             Optional<Category> category = categoryRepository.findById(updateEventByAdminDto.getCategory());
             event.setCategory(category.get());
@@ -348,15 +345,14 @@ public class EventService {
             event.setTitle(updateEventByAdminDto.getTitle());
         }
         if (updateEventByAdminDto.getStateAction() != null
-                && updateEventByAdminDto.getStateAction().equals(State.PUBLISHED) && event.getState().equals(State.PENDING)) {
+                && updateEventByAdminDto.getStateAction().equals(UserStateAction.PUBLISH_EVENT) && event.getState().equals(State.PENDING)) {
             event.setState(State.PUBLISHED);
         }
         if (updateEventByAdminDto.getStateAction() != null
-                && updateEventByAdminDto.getStateAction().equals(State.REJECTED) && !event.getState().equals(State.PUBLISHED)) {
+                && updateEventByAdminDto.getStateAction().equals(UserStateAction.REJECT_EVENT) && !event.getState().equals(State.PUBLISHED)) {
             event.setState(State.CANCELED);
         }
         event = eventRepository.save(event);
-        ////////
 
 
         OutputFullEventDto dto = EventMapper.toOutputFullEventDto(event);
@@ -382,7 +378,7 @@ public class EventService {
     }
 
     private OutputFullEventDto addConfRecToFull(Event event) {  /** ГОТОВО */
-        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+
         List<OutputRequestDto> requests = requestRepository.findAllByEventAndStatus(event, RequestStatus.CONFIRMED)
                 .stream().map(RequestMapper::toOutputRequestDto).collect(Collectors.toList());
         OutputFullEventDto dto = EventMapper.toOutputFullEventDto(event);

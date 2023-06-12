@@ -3,7 +3,6 @@ package ru.practicum.ewmservice.event.repository;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import ru.practicum.ewmservice.event.model.Event;
 import ru.practicum.ewmservice.event.model.State;
 
@@ -45,22 +44,6 @@ public interface EventRepository extends JpaRepository<Event, Long> {
                        Pageable pageable);
 
 
-//    @Query("SELECT e " +
-//            "FROM Event e " +
-//            "WHERE (lower(e.annotation) LIKE lower(concat('%', :text, '%')) OR lower(e.description) LIKE lower(concat('%', :text, '%')) OR :text IS NULL) " +
-//            "AND (e.category.id IN :categories OR :categories IS NULL) " +
-//            "AND (e.paid=:paid OR :paid IS NULL) " +
-//            "AND (e.eventDate BETWEEN :startSearch AND :endSearch) " +
-//            "AND (e.state = :state) " +
-//            "ORDER BY e.eventDate")
-//    List<Event> search2(String text,
-//                       List<Long> categories,
-//                       Boolean paid,
-//                       LocalDateTime startSearch,
-//                       LocalDateTime endSearch,
-//                       State published,
-//                       Pageable pageable);
-
-    List<Event> findAllByInitiatorIdInAndStateInAndCategoryIdInAndEventDateIsAfterAndEventDateIsBefore(List<Long> users, List<State> states, List<Long> categories, LocalDateTime rangeStart, LocalDateTime rangeEnd, Pageable pageable);
+   List<Event> findAllByInitiatorIdInAndStateInAndCategoryIdInAndEventDateIsAfterAndEventDateIsBefore(List<Long> users, List<State> states, List<Long> categories, LocalDateTime rangeStart, LocalDateTime rangeEnd, Pageable pageable);
 
 }
