@@ -33,8 +33,8 @@ public class UserController {
     public List<OutputUserDto> getUsersByIds(
             @RequestParam(name = "ids", required = false) List<Long> usersIds,
             @RequestParam(name = "from", defaultValue = "0") Integer from,
-            @RequestParam(name = "size", defaultValue = "10") Integer size
-    ) {
+            @RequestParam(name = "size", defaultValue = "10") Integer size) {
+
         return userService.getUsersByIds(usersIds, from, size);
     }
 

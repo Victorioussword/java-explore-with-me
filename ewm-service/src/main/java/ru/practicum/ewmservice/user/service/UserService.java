@@ -25,13 +25,14 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-
+    @Transactional
     public OutputUserDto createUser(InputUserDto inputUserDto) {
         OutputUserDto outputUserDto = UserMapper.toOutputUserDto(userRepository.save(UserMapper.toUser(inputUserDto)));
         log.info("UserService - createUser(). Добавлен {}", outputUserDto.toString());
         return outputUserDto;
     }
 
+    @Transactional
     public void delById(Long id) {
         checkUnicId(id);
         log.info("UserService - delById(). Удален пользователь с id {}", id);
@@ -49,7 +50,7 @@ public class UserService {
             return outputUserDtos;
 
         } else {
-            Page<User> usersPage = userRepository.findAllByIdIn( usersIds, PageRequest.of(from, size));
+            Page<User> usersPage = userRepository.findAllByIdIn(usersIds, PageRequest.of(from, size));
             List<User> users = usersPage.toList();
             List<OutputUserDto> outputUserDtos = users.stream().map(UserMapper::toOutputUserDto).collect(Collectors.toList());
             log.info("UserController - getAll(). Возвращен список из {} пользователей", outputUserDtos.size());

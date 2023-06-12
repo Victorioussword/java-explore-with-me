@@ -27,8 +27,3 @@ public class User {
     private String email;
 
 }
-
-//{
-//  "email": "ivan.petrov@practicummail.ru",
-//  "name": "Иван Петров"
-//}
