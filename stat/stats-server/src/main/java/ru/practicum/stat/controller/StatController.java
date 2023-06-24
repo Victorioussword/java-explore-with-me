@@ -34,9 +34,8 @@ public class StatController {
                                        @RequestParam @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime end,
                                        @RequestParam(required = false) List<String> uris,
                                        @RequestParam(defaultValue = "false") boolean unique) {
-//        if (start.isAfter(end)) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-//        }
+
+
         return ResponseEntity.status(HttpStatus.OK).body(statsService.getViewStats(start, end, uris, unique));
     }
 }

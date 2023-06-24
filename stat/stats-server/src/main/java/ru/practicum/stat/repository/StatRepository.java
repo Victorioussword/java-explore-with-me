@@ -1,14 +1,13 @@
 package ru.practicum.stat.repository;
 
-import org.springframework.data.repository.query.Param;
-import ru.practicum.stat.dto.ViewStatDto;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Repository;
-import ru.practicum.stat.model.Hit;
-
-import java.time.LocalDateTime;
 import java.util.List;
+import java.time.LocalDateTime;
+import ru.practicum.stat.model.Hit;
+import ru.practicum.stat.dto.ViewStatDto;
+import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 @Repository
 public interface StatRepository extends JpaRepository<Hit, Long> {
@@ -52,6 +51,4 @@ public interface StatRepository extends JpaRepository<Hit, Long> {
             "order by count(hit.ip) desc")
     List<ViewStatDto> getStatUnUniqueIpNoUris(@Param("start") LocalDateTime start,
                                               @Param("end") LocalDateTime end);
-
-
 }
