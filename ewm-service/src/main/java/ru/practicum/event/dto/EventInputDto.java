@@ -36,7 +36,6 @@ public class EventInputDto {
     @NotNull
     private Long category;
 
-    @NotNull
     @Size(max = 7000, min = 20)
     @Column(length = 7000)
     private String description;
