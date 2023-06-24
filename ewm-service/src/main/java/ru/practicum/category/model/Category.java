@@ -1,19 +1,18 @@
 package ru.practicum.category.model;
 
-import lombok.Data;
+import lombok.*;
 import javax.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import javax.validation.constraints.Size;
 
-
-@Data
 @Entity
+@Setter
+@Getter
+@ToString
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "categories", schema = "public")
+@Table(name = "categories")
 
 public class Category {
 

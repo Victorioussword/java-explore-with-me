@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class InputСategoryDto {
+public class InputCategoryDto {
 
     @NotBlank
     @Size(min = 1, max = 50)

@@ -3,8 +3,11 @@ package ru.practicum.category.service;
 
 import java.util.List;
 import java.util.Optional;
+
 import lombok.extern.slf4j.Slf4j;
+
 import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import ru.practicum.category.model.Category;
 import org.springframework.data.domain.Page;
@@ -29,7 +32,7 @@ public class CategoryService {
     public OutputCategoryDto create(Category category) {
         checkUniqueName(category.getName());
         log.info("CategoryService - create().  ДОбавлено  {}", category.toString());
-        return CategoryMapper.toOutputCategoryDto( categoryRepository.save(category));
+        return CategoryMapper.toOutputCategoryDto(categoryRepository.save(category));
     }
 
 
@@ -74,7 +77,7 @@ public class CategoryService {
         categoryOptional.get().setName(category.getName());
         log.info("CategoryService - update().  Обнолена категория  id = {}, name = {}",
                 id, categoryOptional.get().getName());
-        return CategoryMapper.toOutputCategoryDto(categoryOptional.get()) ;
+        return CategoryMapper.toOutputCategoryDto(categoryOptional.get());
     }
 
 

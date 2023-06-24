@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "hit", schema = "public")
+@Table(name = "hit")
 
 public class Hit {
 

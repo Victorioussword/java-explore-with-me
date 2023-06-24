@@ -5,9 +5,8 @@ import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import ru.practicum.category.model.Category;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.category.dto.InputСategoryDto;
+import ru.practicum.category.dto.InputCategoryDto;
 import ru.practicum.category.dto.OutputCategoryDto;
 import ru.practicum.category.mapper.CategoryMapper;
 import ru.practicum.category.service.CategoryService;
@@ -25,8 +24,8 @@ public class CategoryControllerAdmin {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public OutputCategoryDto create(@RequestBody @Valid InputСategoryDto inputСategoryDto) {
-        OutputCategoryDto outputCategoryDto = categoryService.create(CategoryMapper.toCategory(inputСategoryDto));
+    public OutputCategoryDto create(@RequestBody @Valid InputCategoryDto inputCategoryDto) {
+        OutputCategoryDto outputCategoryDto = categoryService.create(CategoryMapper.toCategory(inputCategoryDto));
         log.info("CategoryControllerAdmin - createCategory().  ДОбавлено  {}", outputCategoryDto.toString());
         return outputCategoryDto;
     }
@@ -42,10 +41,10 @@ public class CategoryControllerAdmin {
 
 
     @PatchMapping("/{catId}")
-    public OutputCategoryDto update(@RequestBody @Valid InputСategoryDto inputСategoryDto,
+    public OutputCategoryDto update(@RequestBody @Valid InputCategoryDto inputCategoryDto,
                                     @PathVariable Long catId) {
         OutputCategoryDto outputCategoryDto = categoryService
-                .update(CategoryMapper.toCategory(inputСategoryDto), catId);
+                .update(CategoryMapper.toCategory(inputCategoryDto), catId);
         log.info("CategoryControllerAdmin - update().  обновлена Category = {}", outputCategoryDto.getName());
         return outputCategoryDto;
     }

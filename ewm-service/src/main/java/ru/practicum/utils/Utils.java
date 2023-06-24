@@ -169,7 +169,8 @@ public class Utils {
             }
         }
     }
-   public static int maxPartCount(Long a, int b) {
+
+    public static int maxPartCount(Long a, int b) {
         int max;
         if (a <= b) max = a.intValue();
         else max = b;
@@ -180,7 +181,7 @@ public class Utils {
         return requestRepository.countByEventIdAndStatus(eventId, Status.CONFIRMED);
     }
 
-    public static Long viewsEvent(String rangeStart, String rangeEnd, String uris, Boolean unique,  StatClient statClient) {
+    public static Long viewsEvent(String rangeStart, String rangeEnd, String uris, Boolean unique, StatClient statClient) {
         List<ViewStatDto> viewStatDtos = statClient.getStat(rangeStart, rangeEnd, List.of(uris), unique);
 
         return viewStatDtos.size() > 0 ? viewStatDtos.get(0).getHits() : 0L;

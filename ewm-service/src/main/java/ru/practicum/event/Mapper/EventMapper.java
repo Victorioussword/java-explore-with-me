@@ -5,7 +5,6 @@ import ru.practicum.category.model.Category;
 import ru.practicum.event.dto.EventDto;
 import ru.practicum.event.dto.EventInputDto;
 import ru.practicum.event.dto.EventShortDto;
-import ru.practicum.event.dto.EventUpdateByUserDto;
 import ru.practicum.event.model.Event;
 import ru.practicum.utils.enums.State;
 import ru.practicum.user.mapper.UserMapper;
@@ -61,19 +60,6 @@ public class EventMapper {
                 .initiator(initiator)
                 .category(categorie)
                 .state(State.PENDING)
-                .build();
-    }
-
-    public static Event toEntityUpdate(EventUpdateByUserDto dto) {
-        return Event.builder()
-                .annotation(dto.getAnnotation())
-                .description(dto.getDescription())
-                .eventDate(dto.getEventDate())
-                .location(dto.getLocation())
-                .paid(dto.getPaid())
-                .participantLimit(dto.getParticipantLimit())
-                .requestModeration(dto.getRequestModeration())
-                .title(dto.getTitle())
                 .build();
     }
 }
