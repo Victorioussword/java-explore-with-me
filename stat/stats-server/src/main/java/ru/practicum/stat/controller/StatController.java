@@ -1,8 +1,11 @@
 package ru.practicum.stat.controller;
 
 import java.util.List;
+
 import com.sun.istack.NotNull;
+
 import java.time.LocalDateTime;
+
 import lombok.extern.slf4j.Slf4j;
 import ru.practicum.stat.dto.HitDto;
 import lombok.RequiredArgsConstructor;
@@ -34,9 +37,10 @@ public class StatController {
                                        @RequestParam(required = false) List<String> uris,
                                        @RequestParam(defaultValue = "false") boolean unique) {
 
-        if (start == null) {
+        if (end.isBefore(start)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
+
         return ResponseEntity.status(HttpStatus.OK).body(statsService.getViewStats(start, end, uris, unique));
     }
 }

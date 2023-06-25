@@ -29,13 +29,13 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class EventServicePublic {
 
-    private final EventRepository eventRepository;
+    private final StatClient statClient;
 
-    private final CategoryRepository categoryRepository;
+    private final EventRepository eventRepository;
 
     private final RequestRepository requestRepository;
 
-    private final StatClient statClient;
+    private final CategoryRepository categoryRepository;
 
 
     public EventDto getEventById(Long id, String ip) {
@@ -55,15 +55,6 @@ public class EventServicePublic {
         return eventDto;
     }
 
-
-//2023-06-25 00:04:14 2023-06-24 20:04:14.993 ERROR 1 --- [nio-8080-exec-6] o.a.c.c.C.[.[.[/].[dispatcherServlet]
-// : Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed;
-// nested exception is java.lang.IllegalArgumentException:
-// Cannot deserialize value of type `java.util.ArrayList<ru.practicum.stat.dto.ViewStatDto>` from Object value (token `JsonToken.START_OBJECT`)
-//2023-06-25 00:04:14  at [Source: UNKNOWN; byte offset: #UNKNOWN]] with root cause
-//2023-06-25 00:04:14
-//2023-06-25 00:04:14 com.fasterxml.jackson.databind.exc.MismatchedInputException: Cannot deserialize value of type `java.util.ArrayList<ru.practicum.stat.dto.ViewStatDto>` from Object value (token `JsonToken.START_OBJECT`)
-//2023-06-25 00:04:14  at [Source: UNKNOWN; byte offset: #UNKNOWN]
 
     @Transactional
     public List<EventShortDto> searchEvent(String text,
@@ -98,7 +89,7 @@ public class EventServicePublic {
                     .filter(event -> event.getParticipantLimit() > Utils.confirmedRequests(event.getId(), requestRepository))
                     .collect(Collectors.toList());
         }
-        log.info("111111111");
+        log.info("Завершен поиск Event");
         List<EventShortDto> eventShortDtos = events.stream()
                 .map(EventMapper::toShortDto)
                 .peek(shortDto -> {
@@ -111,14 +102,16 @@ public class EventServicePublic {
 
                 })
                 .collect(Collectors.toList());
-        log.info("444444444");
+        log.info("Event -> EventShortDto");
         if (sort.equals("VIEWS")) {
             eventShortDtos.stream()
                     .sorted(Comparator.comparing(EventShortDto::getViews));
         }
         log.info("555555555555");
         Utils.saveHit(ip, null, statClient);
-        log.info("666666666666");
+
+        log.info("Utils.saveHit - Done");
+
         if (eventShortDtos.isEmpty()) {
             throw new BadRequestException("Не найдены данные.");
         }
