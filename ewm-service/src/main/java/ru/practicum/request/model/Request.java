@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "request", schema = "public")
+@Table(name = "request")
 
 public class Request {
     @Id

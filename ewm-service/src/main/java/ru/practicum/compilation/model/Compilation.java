@@ -14,7 +14,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "compilation", schema = "public")
+@Table(name = "compilation")
 
 public class Compilation {
 

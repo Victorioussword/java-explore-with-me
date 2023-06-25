@@ -3,6 +3,7 @@ package ru.practicum.utils;
 import java.util.List;
 import java.time.LocalDateTime;
 
+import lombok.extern.slf4j.Slf4j;
 import ru.practicum.client.StatClient;
 import ru.practicum.event.model.Event;
 import ru.practicum.stat.dto.HitDto;
@@ -21,7 +22,7 @@ import ru.practicum.exceptions.ObjectNotFoundException;
 import ru.practicum.request.repository.RequestRepository;
 import ru.practicum.category.repository.CategoryRepository;
 
-
+@Slf4j
 public class Utils {
 
     public static Long getViews(String rangeStart,
@@ -30,9 +31,13 @@ public class Utils {
                                 Boolean unique,
                                 StatClient statClient) {
 
-        List<ViewStatDto> dto = statClient.getStat(rangeStart, rangeEnd, List.of(uris), unique);
-        if (dto.size() > 0) {
-            return dto.get(0).getHits();
+        List<ViewStatDto> viewStatDtos = statClient.getStat(rangeStart, rangeEnd, List.of(uris), unique);
+
+        log.info("Utils.getViews возвращено viewStatDtos {}", viewStatDtos.toString());
+
+        if (viewStatDtos.size() > 0) {
+
+            return viewStatDtos.get(0).getHits();
         } else {
             return 0L;
         }
@@ -156,6 +161,7 @@ public class Utils {
 
 
     public static void checkRequest(Event event, Long userId, RequestRepository requestRepository) {
+        log.info("Utils.checkRequest. НАчало проверки");
         if (event.getInitiator().getId() == userId) {
             throw new ConflictException("User не может создать на событие. User - создатель события");
         }
@@ -168,7 +174,9 @@ public class Utils {
                 throw new ConflictException("Превышено количество запросов");
             }
         }
+        log.info("Utils.checkRequest(). Проверка пройдена.");
     }
+
 
     public static int maxPartCount(Long a, int b) {
         int max;
@@ -181,11 +189,6 @@ public class Utils {
         return requestRepository.countByEventIdAndStatus(eventId, Status.CONFIRMED);
     }
 
-    public static Long viewsEvent(String rangeStart, String rangeEnd, String uris, Boolean unique, StatClient statClient) {
-        List<ViewStatDto> viewStatDtos = statClient.getStat(rangeStart, rangeEnd, List.of(uris), unique);
-
-        return viewStatDtos.size() > 0 ? viewStatDtos.get(0).getHits() : 0L;
-    }
 
     public static void saveHit(String ip, Long eventId, StatClient statClient) {
         HitDto hitDto = new HitDto();
@@ -198,5 +201,6 @@ public class Utils {
             hitDto.setUri("/events/" + eventId);
         }
         statClient.saveStat(hitDto);
+        log.info("Utils.saveHit(). Сохранено успешно");
     }
 }

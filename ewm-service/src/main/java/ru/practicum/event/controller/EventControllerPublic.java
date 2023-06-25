@@ -2,11 +2,14 @@ package ru.practicum.event.controller;
 
 
 import java.util.List;
+
 import lombok.extern.slf4j.Slf4j;
 import lombok.RequiredArgsConstructor;
 import ru.practicum.event.dto.EventDto;
 import ru.practicum.event.dto.EventShortDto;
+
 import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.event.service.EventServicePublic;
 
@@ -44,10 +47,10 @@ public class EventControllerPublic {
             @RequestParam(name = "from", defaultValue = "0") int from,
             @RequestParam(name = "size", defaultValue = "10") int size,
             HttpServletRequest request) {
-//        log.info("EventControllerPublic -  searchEvent().  " +
-//                "\n {} " +
-//                "\n request.getMethod() {}" +
- //               "\n  request.getRemoteAddr() {}", "HttpServletRequest request", request.getMethod(), request.getRemoteAddr());
+        log.info("EventControllerPublic -  searchEvent().  " +
+                "\n {} " +
+                "\n request.getMethod() {}" +
+                "\n  request.getRemoteAddr() {}", "HttpServletRequest request", request.getMethod(), request.getRemoteAddr());
 
         List<EventShortDto> list = eventServicePublic.searchEvent(text,
                 categories,

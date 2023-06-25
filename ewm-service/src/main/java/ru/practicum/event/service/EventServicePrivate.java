@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.time.LocalDateTime;
 
+import lombok.RequiredArgsConstructor;
 import ru.practicum.utils.Utils;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.stream.Collectors;
@@ -41,7 +41,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class EventServicePrivate {
 
     private final UserRepository userRepository;

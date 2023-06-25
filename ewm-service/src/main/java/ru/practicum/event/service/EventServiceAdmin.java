@@ -4,17 +4,22 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.time.LocalDateTime;
+
 import ru.practicum.event.dto.*;
 import ru.practicum.utils.Utils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import java.util.stream.Collectors;
+
 import ru.practicum.user.model.User;
 import ru.practicum.utils.enums.State;
 import ru.practicum.event.model.Event;
 import ru.practicum.client.StatClient;
 import ru.practicum.request.model.Status;
+
 import java.time.format.DateTimeFormatter;
+
 import ru.practicum.category.model.Category;
 import ru.practicum.event.Mapper.EventMapper;
 import org.springframework.stereotype.Service;
@@ -99,8 +104,12 @@ public class EventServiceAdmin {
                 .map(EventMapper::toEventDto)
                 .peek(eventDto -> eventDto.setConfirmedRequests(requestRepository
                         .countByEventIdAndStatus(eventDto.getId(), Status.CONFIRMED)))
-                .peek(eventDto -> eventDto
-                        .setViews(Utils.getViews(rangeStart, rangeEnd, "/events/" + eventDto.getId(), false, statClient)))
+                .peek(eventDto -> {
+
+                    eventDto
+                            .setViews(Utils.getViews(rangeStart, rangeEnd, "/events/" + eventDto.getId(), false, statClient));
+
+                })
                 .collect(Collectors.toList());
     }
 

@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Data
 @Entity
-@Table(name = "events", schema = "public")
+@Table(name = "events")
 @SuperBuilder
 public class Event {
     @Id

@@ -21,11 +21,12 @@ import java.util.Map;
 @Slf4j
 public class StatClient extends BaseClient {
 
-    private static final String START_DEFAULT = "1900-01-01 01:01:01";
-    private static final String END_DEFAULT = "2200-01-01 01:01:01";
+    private static final String START_DEFAULT = "1971-01-01 01:01:01";
+    private static final String END_DEFAULT = "2999-01-01 01:01:01";
+
 
     @Autowired
-    public StatClient(@Value("${stats-server.url}") String serverUrl, RestTemplateBuilder builder) {
+    public StatClient(@Value("http://localhost:9090") String serverUrl, RestTemplateBuilder builder) { // http://localhost:9090
         super(
                 builder
                         .uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl))
@@ -52,8 +53,14 @@ public class StatClient extends BaseClient {
                 "unique", unique
         );
         ResponseEntity<Object> objectResponseEntity = get("/stats?start={start}&end={end}&uris={uris}&unique={unique}", parameters);
+
+
         List<ViewStatDto> viewStatDto = new ObjectMapper().convertValue(objectResponseEntity.getBody(), new TypeReference<List<ViewStatDto>>() {
         });
+
+        log.info(" Body {}", objectResponseEntity.getBody());
+
         return viewStatDto;
+
     }
 }
