@@ -126,7 +126,7 @@ public class EventServiceAdmin {
         if (!event.getState().equals(State.PENDING)) {
             throw new ConflictException("Обновление State не доступно.");
         }
-        event = Utils.prepareEvent(eventUpdateByAdminDto, event, categoryRepository, eventRepository);
+        event = Utils.prepareEventAdm(eventUpdateByAdminDto, event, categoryRepository, eventRepository);
 
         EventDto eventDto = EventMapper.toEventDto(event);
 

@@ -52,10 +52,13 @@ public class Utils {
         }
     }
 
-    public static Event prepareEvent(EventUpdateByAdminDto eventUpdateByAdminDto,
+    public static Event prepareEventAdm(EventUpdateByAdminDto eventUpdateByAdminDto,
                                      Event event,
                                      CategoryRepository categoryRepository,
                                      EventRepository eventRepository) {
+
+        log.info("Utils.prepareEvent - Начало метода: \n {} \n {} \n {} \n {}", eventUpdateByAdminDto, event, categoryRepository, eventRepository);
+
         if (eventUpdateByAdminDto.getAnnotation() != null) {
             event.setAnnotation(eventUpdateByAdminDto.getAnnotation());
         }
@@ -104,14 +107,15 @@ public class Utils {
         }
 
         event = eventRepository.save(event);
+        log.info("Utils.prepareEventAdm() - Возвращено: {}", event);
         return event;
     }
 
 
-    public static Event prepareEvent(EventUpdateByUserDto dto,
-                                     Event event,
-                                     CategoryRepository categoryRepository,
-                                     EventRepository eventRepository) {
+    public static Event prepareEventforPrivate(EventUpdateByUserDto dto,
+                                               Event event,
+                                               CategoryRepository categoryRepository,
+                                               EventRepository eventRepository) {
         if (dto.getAnnotation() != null) {
             event.setAnnotation(dto.getAnnotation());
         }
@@ -149,6 +153,7 @@ public class Utils {
             event.setState(State.CANCELED);
         }
         event = eventRepository.save(event);
+        log.info("Utils. prepareEventforPrivate() - Возвращено: {}", event);
         return event;
     }
 

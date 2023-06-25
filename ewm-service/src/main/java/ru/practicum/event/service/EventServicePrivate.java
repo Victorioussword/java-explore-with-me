@@ -122,7 +122,7 @@ public class EventServicePrivate {
         if (event.getState().equals(State.PUBLISHED)) {
             throw new ConflictException("Обновление события не возможно.");
         }
-        event = Utils.prepareEvent(dto, event, categoryRepository, eventRepository);
+        event = Utils.prepareEventforPrivate(dto, event, categoryRepository, eventRepository);
         EventDto eventDto = EventMapper.toEventDto(event);
 
         log.info("EventServicePrivate - getRequestsForEvent() Возвращено {}", eventDto.toString());
