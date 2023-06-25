@@ -26,7 +26,7 @@ public class StatClient extends BaseClient {
 
 
     @Autowired
-    public StatClient(@Value("http://localhost:9090") String serverUrl, RestTemplateBuilder builder) { // http://localhost:9090
+    public StatClient(@Value("http://stats-server:9090") String serverUrl, RestTemplateBuilder builder) { // http://localhost:9090
         super(
                 builder
                         .uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl))
