@@ -3,11 +3,11 @@ package ru.practicum.stat.controller;
 import com.sun.istack.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import ru.practicum.stat.dto.HitDto;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.stat.dto.ViewStatDto;
 import ru.practicum.stat.mapper.HitMapper;
 import ru.practicum.stat.service.StatService;
 
@@ -30,21 +30,15 @@ public class StatController {
     }
 
     @GetMapping(value = "/stats")
-    public List<ViewStatDto> getViewStats(@RequestParam @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime start,
-                                          @RequestParam @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime end,
-                                          @RequestParam(required = false) List<String> uris,
-                                          @RequestParam(defaultValue = "false") boolean unique) {
+    public ResponseEntity getViewStats(@RequestParam @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime start,
+                                       @RequestParam @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime end,
+                                       @RequestParam(required = false) List<String> uris,
+                                       @RequestParam(defaultValue = "false") boolean unique) {
 
-      //  ResponseEntity re = ResponseEntity.status(HttpStatus.OK).body(statsService.getViewStats(start, end, uris, unique));
+        if (start.isAfter(end)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
 
- //       if (uris != null){
- //           log.info("StatService - getViewStats(). uris {}", uris.toString());
-//        }
-            // StatService - getViewStats(). отпралено <200 OK OK,<200 OK OK,[],[]>,[]>
-
- //           log.info("StatService - getViewStats(). отпралено {}", re.toString());
- //       log.info("StatService - getViewStats(). Body {}", re.getBody().toString());
-
-        return statsService.getViewStats(start, end, uris, unique);
+        return ResponseEntity.status(HttpStatus.OK).body(statsService.getViewStats(start, end, uris, unique));
     }
 }
