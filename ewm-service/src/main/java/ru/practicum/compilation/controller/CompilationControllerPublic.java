@@ -28,11 +28,11 @@ public class CompilationControllerPublic {
     }
 
     @GetMapping
-    public List<OutputCompilationDto> getAll(@RequestParam(defaultValue = "false") Boolean pinned,
+    public List<OutputCompilationDto> getAll(@RequestParam(required = false) Boolean pinned,
                                              @RequestParam(name = "from", defaultValue = "0") int from,
                                              @RequestParam(name = "size", defaultValue = "10") int size) {
 
-        List<OutputCompilationDto> list = compilationService.getAll(pinned, from, size);
+        List<OutputCompilationDto> list = compilationService.getAll(pinned, from, size);  // TODO - меняю этот метод
         log.info("CompilationControllerPublic - getAll().  Возвращен списк из {} элементов", list.size());
         return list;
     }

@@ -4,7 +4,7 @@ import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
 import lombok.RequiredArgsConstructor;
-import javax.validation.constraints.NotNull;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.request.dto.RequestDto;
@@ -15,7 +15,6 @@ import ru.practicum.request.service.RequestService;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
-
 public class RequestController {
 
     private final RequestService requestService;
@@ -24,7 +23,7 @@ public class RequestController {
     @PostMapping("/{userId}/requests")
     @ResponseStatus(HttpStatus.CREATED)
     public RequestDto createRequest(@PathVariable Long userId,
-                                    @RequestParam @NotNull long eventId) {
+                                    @RequestParam Long eventId) {
 
         RequestDto requestDto = requestService.createRequest(userId, eventId);
         log.info(" RequestController  - createRequest().  Создано   {}. ", requestDto.toString());

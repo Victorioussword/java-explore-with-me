@@ -1,13 +1,11 @@
 package ru.practicum.request.repository;
 
 import java.util.List;
+
 import ru.practicum.request.model.Status;
 import ru.practicum.request.model.Request;
-import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-
-@Repository
 public interface RequestRepository extends JpaRepository<Request, Long> {
 
 

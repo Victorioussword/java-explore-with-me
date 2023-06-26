@@ -12,6 +12,6 @@ import lombok.experimental.SuperBuilder;
 
 public class OutputCategoryDto {
 
-    long id;
+    private long id;
     private String name;
 }
