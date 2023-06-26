@@ -166,7 +166,7 @@ public class EventServicePrivate {
 
         List<Request> requests = requestRepository.findByIdIn(requestStatusUpdateDto.getRequestIds());
 
-        if (requestRepository.countByEventId(event.getId()) >= event.getParticipantLimit()) {
+        if (requestRepository.countByEventId(event.getId()) > event.getParticipantLimit()) {   // TODO изменил знак сравнения было >=
             throw new ConflictException("Достигнут лимит запросов на участие");
         }
         List<RequestDto> confRequestsDtos = new ArrayList<>();
