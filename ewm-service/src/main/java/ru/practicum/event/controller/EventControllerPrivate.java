@@ -37,6 +37,7 @@ public class EventControllerPrivate {
         return list;
     }
 
+
     @PostMapping("/{userId}/events")
     @ResponseStatus(HttpStatus.CREATED)
     public EventDto create(
