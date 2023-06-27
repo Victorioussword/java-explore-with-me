@@ -82,6 +82,7 @@ public class EventControllerPrivate {
         return listsDto;
     }
 
+
     @PatchMapping("/{userId}/events/{eventId}")
     public EventDto updateByOwner(
             @RequestBody @Valid EventUpdateByUserDto eventUpdateByUserDto,
