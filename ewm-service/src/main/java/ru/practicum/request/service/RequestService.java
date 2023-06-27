@@ -12,7 +12,7 @@ import ru.practicum.request.model.Status;
 import ru.practicum.request.model.Request;
 import ru.practicum.request.dto.RequestDto;
 import org.springframework.stereotype.Service;
-//import ru.practicum.exceptions.ConflictException;
+import ru.practicum.exceptions.ConflictException;
 import ru.practicum.request.mapper.RequestMapper;
 import ru.practicum.user.repository.UserRepository;
 import ru.practicum.event.repository.EventRepository;
@@ -42,9 +42,9 @@ public class RequestService {
 
         List<Request> checkExistingRequest = requestRepository.findAllByRequesterIdAndEventId(userId, eventId);
 
-//        if (!checkExistingRequest.isEmpty()) {
-//            throw new ConflictException("Request уже существует");
-//        }
+        if (!checkExistingRequest.isEmpty()) {
+            throw new ConflictException("Request уже существует");
+        }
 
         Request request;
         if (event.getRequestModeration()) {

@@ -18,8 +18,9 @@ import ru.practicum.request.service.RequestService;
 public class RequestController {
 
     private final RequestService requestService;
-// POST http://localhost:8080/users/103/requests?eventId=85
 
+
+// POST http://localhost:8080/users/103/requests?eventId=85
     @PostMapping("/{userId}/requests")
     @ResponseStatus(HttpStatus.CREATED)
     public RequestDto createRequest(@PathVariable Long userId,
