@@ -17,7 +17,7 @@ import org.springframework.validation.annotation.Validated;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/admin/users")
-
+@Validated
 public class UserController {
 
     private final UserService userService;

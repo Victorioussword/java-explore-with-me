@@ -19,7 +19,7 @@ public class RequestController {
 
     private final RequestService requestService;
 
-
+// todo - этот метод косячит!
 // POST http://localhost:8080/users/103/requests?eventId=85
     @PostMapping("/{userId}/requests")
     @ResponseStatus(HttpStatus.CREATED)

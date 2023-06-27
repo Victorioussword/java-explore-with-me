@@ -2,8 +2,12 @@ package ru.practicum.user.service;
 
 
 import java.util.List;
+
 import lombok.extern.slf4j.Slf4j;
+
 import java.util.stream.Collectors;
+
+import ru.practicum.exceptions.ConflictException;
 import ru.practicum.user.model.User;
 import ru.practicum.user.dto.UserDto;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +27,10 @@ public class UserService {
     private final UserRepository userRepository;
 
     public UserDto create(UserInputDto userInputDto) {
+
+        if (!userRepository.findAllByName(userInputDto.getName()).isEmpty()) {
+            throw new ConflictException("User c таки именем уже существует");
+        }
 
         User user = UserMapper.toUser(userInputDto);
 
