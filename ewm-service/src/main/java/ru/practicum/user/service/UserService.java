@@ -27,7 +27,7 @@ public class UserService {
     private final UserRepository userRepository;
 
     public UserDto create(UserInputDto userInputDto) {
-
+       // Тест Postman: "Добавление пользователя с занятым именем"
         if (!userRepository.findAllByName(userInputDto.getName()).isEmpty()) {
             throw new ConflictException("User c таки именем уже существует");
         }

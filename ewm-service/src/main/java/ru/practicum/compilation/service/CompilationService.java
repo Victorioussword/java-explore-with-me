@@ -80,7 +80,7 @@ public class CompilationService {
                     .map(CompilationMapper::toOutputCompilationDto)
                     .collect(Collectors.toList());
 
-            log.info(" CompilationService - getAll(). Pinned !=null Возвращен список {}", dtos.size());
+            log.info(" CompilationService - getAll(). Pinned != null Возвращен список {}", dtos.size());
             return dtos;
         } else {
             List<OutputCompilationDto> dtos2 = compilationRepository.findAll(PageRequest.of(from, size)).stream()
