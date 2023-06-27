@@ -75,13 +75,22 @@ public class CompilationService {
 
     public List<OutputCompilationDto> getAll(Boolean pinned, int from, int size) {
 
-        List<OutputCompilationDto> dtos = compilationRepository.getAllByPinned(pinned, PageRequest.of(from, size)).stream()
-                .map(CompilationMapper::toOutputCompilationDto)
-                .collect(Collectors.toList());
-        log.info(" CompilationService - getAll().  Возвращен список {}", dtos.size());
-        return dtos;
-    }
+        if (pinned != null) {
+            List<OutputCompilationDto> dtos = compilationRepository.getAllByPinned(pinned, PageRequest.of(from, size)).stream()
+                    .map(CompilationMapper::toOutputCompilationDto)
+                    .collect(Collectors.toList());
 
+            log.info(" CompilationService - getAll(). Pinned !=null Возвращен список {}", dtos.size());
+            return dtos;
+        } else {
+            List<OutputCompilationDto> dtos2 = compilationRepository.findAll(PageRequest.of(from, size)).stream()
+                    .map(CompilationMapper::toOutputCompilationDto)
+                    .collect(Collectors.toList());
+
+            log.info(" CompilationService - getAll(). Pinned == null Возвращен список {}", dtos2.size());
+            return dtos2;
+        }
+    }
 
     @Transactional
     public OutputCompilationDto updateCompilation(InputUpdateCompilationDto inputUpdateCompilationDto, Long compId) {
