@@ -10,10 +10,8 @@ import lombok.RequiredArgsConstructor;
 import ru.practicum.user.dto.UserInputDto;
 import ru.practicum.user.mapper.UserMapper;
 import org.springframework.stereotype.Service;
-import ru.practicum.exceptions.ConflictException;
 import org.springframework.data.domain.PageRequest;
 import ru.practicum.user.repository.UserRepository;
-import ru.practicum.exceptions.BadRequestException;
 import ru.practicum.exceptions.ObjectNotFoundException;
 
 
@@ -25,13 +23,9 @@ public class UserService {
     private final UserRepository userRepository;
 
     public UserDto create(UserInputDto userInputDto) {
-        if (userInputDto.getEmail() == null) {
-            throw new BadRequestException("Необходимо указать email");
-        }
+
         User user = UserMapper.toUser(userInputDto);
-        if (userRepository.findUserByName(userInputDto.getName()).isPresent()) {
-            throw new ConflictException("User с таким именем существует");
-        }
+
         log.info("UserService - create().  Создано  {}", user.toString());
 
         return UserMapper.toUserDto(userRepository.save(user));
