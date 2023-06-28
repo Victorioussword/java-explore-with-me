@@ -198,7 +198,7 @@ public class Utils {
     public static void saveHit(String ip, Long eventId, StatClient statClient) {
         HitDto hitDto = new HitDto();
         hitDto.setApp("ewm-service");
-        hitDto.setTimeStamp(LocalDateTime.now());
+        hitDto.setTimestamp(LocalDateTime.now());
         hitDto.setIp(ip);
         if (eventId == null) {
             hitDto.setUri("/events");
