@@ -1,11 +1,9 @@
 package ru.practicum.event.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 import ru.practicum.category.model.Category;
 import ru.practicum.utils.enums.State;
@@ -16,7 +14,6 @@ import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
 @Data
 @Entity
 @Table(name = "events")
@@ -24,46 +21,46 @@ import java.time.LocalDateTime;
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
+    private long id;
 
     @Column(length = 2000)
-    String annotation;
+    private String annotation;
 
     @ManyToOne()
     @JoinColumn(name = "category_id")
-    Category category;
+    private Category category;
 
     @Column(name = "created_on")
-    LocalDateTime createdOn;
+    private LocalDateTime createdOn;
 
     @Column(name = "description", length = 7000)
-    String description;
+    private String description;
 
     @Column(name = "event_date")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    LocalDateTime eventDate;
+    private LocalDateTime eventDate;
 
     @ManyToOne()
     @JoinColumn(name = "initiator_id")
-    User initiator;
+    private User initiator;
 
     @Embedded
-    Location location;
+    private Location location;
 
-    Boolean paid;
+    private Boolean paid;
 
     @Column(name = "participant_limit")
-    Long participantLimit;
+    private Long participantLimit;
 
     @Column(name = "published_on")
-    LocalDateTime publishedOn;
+    private LocalDateTime publishedOn;
 
     @Column(name = "request_moderation")
-    Boolean requestModeration;
+    private Boolean requestModeration;
 
     @Enumerated(EnumType.STRING)
-    State state;
+    private State state;
 
     @Column(name = "title")
-    String title;
+    private String title;
 }
