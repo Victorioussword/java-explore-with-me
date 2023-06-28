@@ -20,6 +20,15 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class StatController {
     private final StatService statsService;
 
+
+//    POST http://localhost:9090/hit
+//{
+// "app":"ewm-main-service",
+// "uri":"/events/96",
+// "ip":"106.154.151.141",
+// "timestamp":"2023-06-28 12:14:39"
+// }
+
     @PostMapping("/hit")
     @ResponseStatus(HttpStatus.CREATED)
     public HitDto postHit(@RequestBody HitDto hitDto) {
