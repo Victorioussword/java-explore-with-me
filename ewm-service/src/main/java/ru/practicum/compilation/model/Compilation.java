@@ -2,8 +2,8 @@ package ru.practicum.compilation.model;
 
 import lombok.*;
 
-import java.util.List;
 import java.util.Set;
+
 import javax.persistence.*;
 
 import ru.practicum.event.model.Event;

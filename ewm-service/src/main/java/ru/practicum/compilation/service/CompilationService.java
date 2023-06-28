@@ -1,5 +1,6 @@
 package ru.practicum.compilation.service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,10 +64,10 @@ public class CompilationService {
             compilation.setPinned(false);
         }
         if (inputCompilationDto.getEvents() == null) {
-            compilation.setEvents(eventRepository.findAll());
+            compilation.setEvents(new HashSet<>(eventRepository.findAll()));
         } else {
             List<Event> events = eventRepository.findAllById(inputCompilationDto.getEvents());
-            compilation.setEvents(events);
+            compilation.setEvents(new HashSet<>(events));
         }
         log.info(" CompilationService - createCompilation(). Создана подборка {}", compilation.toString());
         return CompilationMapper.toOutputCompilationDto(compilationRepository.save(compilation));
@@ -112,7 +113,7 @@ public class CompilationService {
 
         if (inputUpdateCompilationDto.getEvents().size() != 0) {
             List<Event> events = eventRepository.findAllById(inputUpdateCompilationDto.getEvents());
-            compilation.setEvents(events);
+            compilation.setEvents(new HashSet<>(events));
         }
 
         log.info(" CompilationService - updateCompilation(). Обновлена подборка {}", compId);
