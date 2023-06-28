@@ -4,10 +4,13 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 import javax.validation.constraints.NotBlank;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 
-@Data
+@Setter  // todo Было @DATA
+@Getter
+@ToString
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,5 +28,5 @@ public class HitDto {
     private String ip;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    LocalDateTime timeStamp;
+    private LocalDateTime timeStamp;  // TODO private
 }

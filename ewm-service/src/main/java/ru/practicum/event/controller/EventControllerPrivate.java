@@ -31,7 +31,7 @@ public class EventControllerPrivate {
     public List<RequestDto> getRequestsForEvent(
             @PathVariable Long userId,
             @PathVariable Long eventId) {
-        log.info("!!!!!!!!");
+        // todo удалено ненужное логирование
         List<RequestDto> list = eventServicePrivate.getRequestsForEvent(userId, eventId);
         log.info("EventControllerPrivate  - getRequestsForEvent.  Возвращен список из {} элементов", list.size());
         return list;

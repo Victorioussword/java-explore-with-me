@@ -32,7 +32,7 @@ public class CompilationControllerPublic {
                                              @RequestParam(name = "from", defaultValue = "0") int from,
                                              @RequestParam(name = "size", defaultValue = "10") int size) {
 
-        List<OutputCompilationDto> list = compilationService.getAll(pinned, from, size);  // TODO - меняю этот метод
+        List<OutputCompilationDto> list = compilationService.getAll(pinned, from, size);
         log.info("CompilationControllerPublic - getAll().  Возвращен списк из {} элементов", list.size());
         return list;
     }
