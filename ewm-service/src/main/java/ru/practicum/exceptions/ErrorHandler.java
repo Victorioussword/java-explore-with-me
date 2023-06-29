@@ -25,6 +25,20 @@ public class ErrorHandler {
         return conflict(conflictException);
     }
 
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ApiError handleNotFound(final ObjectNotFoundException objectNotFoundException) {
+        log.debug("Получен статус 409 Conflict {}",objectNotFoundException.getMessage(), objectNotFoundException);
+        return conflict(objectNotFoundException);
+    }
+
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiError handleBadRequest(final BadRequestException badRequestException) {
+        log.debug("Получен статус 409 Conflict {}",badRequestException.getMessage(), badRequestException);
+        return conflict(badRequestException);
+    }
 
 
     private ApiError conflict(final Exception exception) {
@@ -38,6 +52,5 @@ public class ErrorHandler {
                 .timestamp(LocalDateTime.now().toString())
                 .build();
     }
-
 
 }

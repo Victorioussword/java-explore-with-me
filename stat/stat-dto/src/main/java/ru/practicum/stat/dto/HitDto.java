@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 
-@Setter  // todo Было @DATA
+@Setter
 @Getter
 @ToString
 @Builder
@@ -35,5 +35,5 @@ public class HitDto {
     private String ip;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime timestamp;  // TODO private
+    private LocalDateTime timestamp;
 }
