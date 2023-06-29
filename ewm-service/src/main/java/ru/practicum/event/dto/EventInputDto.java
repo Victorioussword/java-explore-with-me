@@ -7,13 +7,9 @@ import javax.persistence.Column;
 
 import lombok.experimental.SuperBuilder;
 
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 import ru.practicum.event.model.Location;
-
-import javax.validation.constraints.Future;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -44,11 +40,12 @@ public class EventInputDto {
     @NotNull
     private Location location;
 
-    private Boolean paid;
+    private boolean paid;
 
-    private Long participantLimit;
+    @PositiveOrZero
+    private Long participantLimit;   // todo добавлено  @PositiveOrZero
 
-    private Boolean requestModeration;
+    private Boolean requestModeration = true;  // todo добавлено  = true
 
     @NotNull
     @Future

@@ -53,24 +53,24 @@ public class EventServicePrivate {
     private final CategoryRepository categoryRepository;
 
 
-    public EventDto create(EventInputDto dto, Long userId) {
+    public EventDto create(EventInputDto eventInputDto, Long userId) {
 
-        Utils.checkEventDateDeforeCreate(dto);
+        Utils.checkEventDateDeforeCreate(eventInputDto);
 
-        Category category = categoryRepository.findById(dto.getCategory()).orElseThrow(() ->
+        Category category = categoryRepository.findById(eventInputDto.getCategory()).orElseThrow(() ->
                 new ObjectNotFoundException("категория с таким id не существует"));
 
         User user = userRepository.findById(userId).orElseThrow(() -> new ObjectNotFoundException("USer не найден"));
 
-        Event event = EventMapper.toEvent(dto, category, user);
-        if (dto.getPaid() == null) {
-            event.setPaid(false);
-        }
-        if (dto.getParticipantLimit() == null) {
+        Event event = EventMapper.toEvent(eventInputDto, category, user);
+
+            event.setPaid(eventInputDto.isPaid());  // todo замена Boolean -> boolean
+
+        if (eventInputDto.getParticipantLimit() == null) {
             event.setParticipantLimit(0L);
         }
 
-        if (dto.getRequestModeration() == null) {
+        if (eventInputDto.getRequestModeration() == null) {
             event.setRequestModeration(true);
         }
         event = eventRepository.save(event);

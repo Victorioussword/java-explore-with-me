@@ -10,6 +10,7 @@ import lombok.experimental.SuperBuilder;
 import ru.practicum.event.model.Location;
 import ru.practicum.utils.enums.StateAction;
 
+import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
@@ -35,7 +36,8 @@ public class EventUpdateByUserDto {
 
     Boolean paid;
 
-    Long participantLimit;
+    @PositiveOrZero
+    Long participantLimit;  // добавлено  @PositiveOrZero
 
     Boolean requestModeration;
 
