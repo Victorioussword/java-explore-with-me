@@ -43,9 +43,9 @@ public class EventInputDto {
     private boolean paid;
 
     @PositiveOrZero
-    private Long participantLimit;   // todo добавлено  @PositiveOrZero
+    private Long participantLimit;
 
-    private Boolean requestModeration = true;  // todo добавлено  = true
+    private Boolean requestModeration = true;
 
     @NotNull
     @Future

@@ -37,7 +37,7 @@ public class EventUpdateByAdminDto {
     Boolean paid;
 
     @PositiveOrZero
-    Long participantLimit;  //todo добавлено  @PositiveOrZero
+    Long participantLimit;
 
     Boolean requestModeration;
 

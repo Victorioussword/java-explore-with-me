@@ -52,7 +52,7 @@ public class EventMapper {
                 .description(dto.getDescription())
                 .eventDate(dto.getEventDate())
                 .location(dto.getLocation())
-                .paid(dto.isPaid())    // todo замена Boolean -> boolean
+                .paid(dto.isPaid())
                 .participantLimit(dto.getParticipantLimit())
                 .requestModeration(dto.getRequestModeration())
                 .title(dto.getTitle())

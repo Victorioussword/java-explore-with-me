@@ -64,7 +64,7 @@ public class EventServicePrivate {
 
         Event event = EventMapper.toEvent(eventInputDto, category, user);
 
-            event.setPaid(eventInputDto.isPaid());  // todo замена Boolean -> boolean
+            event.setPaid(eventInputDto.isPaid());
 
         if (eventInputDto.getParticipantLimit() == null) {
             event.setParticipantLimit(0L);
