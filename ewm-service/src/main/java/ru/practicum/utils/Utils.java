@@ -1,6 +1,6 @@
 package ru.practicum.utils;
 
-import java.util.List;
+import java.util.*;
 import java.time.LocalDateTime;
 
 import lombok.extern.slf4j.Slf4j;
@@ -25,12 +25,12 @@ import ru.practicum.category.repository.CategoryRepository;
 @Slf4j
 public class Utils {
 
-    public static Long getViews(String rangeStart,
-                                String rangeEnd,
+    public static Long getViews(LocalDateTime rangeStart,
+                                LocalDateTime rangeEnd,
                                 String uris,
                                 Boolean unique,
                                 StatClient statClient) {
-
+// dateStartSearch = LocalDateTime.parse(rangeStart, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         List<ViewStatDto> viewStatDtos = statClient.getStat(rangeStart, rangeEnd, List.of(uris), unique);
 
         log.info("Utils.getViews возвращено viewStatDtos {}", viewStatDtos.toString());
@@ -43,6 +43,33 @@ public class Utils {
         }
     }
 
+    public static Map<Long, Long> getViews2(LocalDateTime rangeStart,
+                                            LocalDateTime rangeEnd,
+                                            List<String> uris,
+                                            Boolean unique,
+                                            StatClient statClient) {
+
+
+        List<ViewStatDto> viewStatDtos = statClient.getStat(rangeStart, rangeEnd, uris, unique);
+        Map<Long, Long> idAndViews = new HashMap<>();
+
+        for (int i = 0; i < viewStatDtos.size(); i++) {
+     //       List<String> stroki = Arrays.stream(viewStatDtos.get(i).getUri().split("/")).toList();
+
+            //String[] array = {"one", "two", "three"};
+            //ArrayList<String> list = new ArrayList<String>();
+            //Collections.addAll(list, array);
+            List<String> stroki = new ArrayList<>();
+            String[] stroks = viewStatDtos.get(i).getUri().split("/");
+            Collections.addAll(stroki, stroks);
+            Long id = Long.parseLong(stroki.get(stroki.size() - 1));
+            idAndViews.put(id, viewStatDtos.get(i).getHits());
+        }
+
+        log.info("Utils.getViews возвращено viewStatDtos {}", viewStatDtos.toString());
+
+        return idAndViews;
+    }
 
     public static void checkEventDateDeforeCreate(EventInputDto eventInputDto) {
 
@@ -53,9 +80,9 @@ public class Utils {
     }
 
     public static Event prepareEventAdm(EventUpdateByAdminDto eventUpdateByAdminDto,
-                                     Event event,
-                                     CategoryRepository categoryRepository,
-                                     EventRepository eventRepository) {
+                                        Event event,
+                                        CategoryRepository categoryRepository,
+                                        EventRepository eventRepository) {
 
         log.info("Utils.prepareEvent - Начало метода: \n {} \n {} \n {} \n {}", eventUpdateByAdminDto, event, categoryRepository, eventRepository);
 

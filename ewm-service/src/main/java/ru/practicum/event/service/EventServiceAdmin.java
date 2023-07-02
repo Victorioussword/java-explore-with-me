@@ -9,17 +9,12 @@ import ru.practicum.event.dto.*;
 import ru.practicum.utils.Utils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import java.util.stream.Collectors;
-
 import ru.practicum.user.model.User;
 import ru.practicum.utils.enums.State;
 import ru.practicum.event.model.Event;
 import ru.practicum.client.StatClient;
 import ru.practicum.request.model.Status;
-
-import java.time.format.DateTimeFormatter;
-
 import ru.practicum.category.model.Category;
 import ru.practicum.event.Mapper.EventMapper;
 import org.springframework.stereotype.Service;
@@ -52,8 +47,8 @@ public class EventServiceAdmin {
     public List<EventDto> getEventsByAdmin(List<Long> users,
                                            List<String> states,
                                            List<Long> categories,
-                                           String rangeStart,
-                                           String rangeEnd,
+                                           LocalDateTime rangeStart,
+                                           LocalDateTime rangeEnd,
                                            int from,
                                            int size) {
 
@@ -81,10 +76,10 @@ public class EventServiceAdmin {
         LocalDateTime dateEndSearch = LocalDateTime.now().minusYears(50L);
 
         if (rangeStart != null) {
-            dateStartSearch = LocalDateTime.parse(rangeStart, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            dateStartSearch = rangeStart;
         }
         if (rangeEnd != null) {
-            dateEndSearch = LocalDateTime.parse(rangeEnd, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            dateEndSearch = rangeEnd;
         }
 
         List<Event> events = eventRepository

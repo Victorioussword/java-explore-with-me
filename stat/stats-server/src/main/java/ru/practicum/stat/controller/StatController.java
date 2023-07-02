@@ -21,14 +21,6 @@ public class StatController {
     private final StatService statsService;
 
 
-//    POST http://localhost:9090/hit
-//{
-// "app":"ewm-main-service",
-// "uri":"/events/96",
-// "ip":"106.154.151.141",
-// "timestamp":"2023-06-28 12:14:39"
-// }
-
     @PostMapping("/hit")
     @ResponseStatus(HttpStatus.CREATED)
     public HitDto postHit(@RequestBody HitDto hitDto) {
@@ -38,16 +30,20 @@ public class StatController {
         return HitMapper.toHitDto(statsService.postHit(HitMapper.toHit(hitDto)));
     }
 
+
     @GetMapping(value = "/stats")
-    public ResponseEntity getViewStats(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime start,
-                                       @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime end,
+    public ResponseEntity getViewStats(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime start,
+                                       @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime end,
                                        @RequestParam(required = false) List<String> uris,
                                        @RequestParam(defaultValue = "false") boolean unique) {
 
-        if (end.isBefore(start)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+        log.info("StatController - getViewStats(). Получены даты {} и  {}", start.toString(), end.toString());
 
-        return ResponseEntity.status(HttpStatus.OK).body(statsService.getViewStats(start, end, uris, unique));
+        log.info("Пеерход в Service");
+        return ResponseEntity.status(HttpStatus.OK).body(statsService.getViewStats(
+                start,
+                end,
+                uris,
+                unique));
     }
 }

@@ -1,10 +1,12 @@
 package ru.practicum.event.controller;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import javax.validation.Valid;
 
 import lombok.extern.slf4j.Slf4j;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import ru.practicum.event.dto.EventDto;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.event.dto.EventUpdateByAdminDto;
@@ -20,10 +22,12 @@ public class EventControllerAdmin {
 
     private final EventServiceAdmin eventServiceAdmin;
 
+
     @GetMapping
     public List<EventDto> getEventsByAdmin(
-            @RequestParam(required = false) String rangeStart,
-            @RequestParam(required = false) String rangeEnd,
+
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeStart,      // todo - теперь принимаем время
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeEnd,         // todo - теперь принимаем время
             @RequestParam(required = false) List<Long> users,
             @RequestParam(required = false) List<Long> categories,
             @RequestParam(required = false) List<String> states,

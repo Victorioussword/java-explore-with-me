@@ -14,6 +14,8 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -21,9 +23,10 @@ import java.util.Map;
 @Slf4j
 public class StatClient extends BaseClient {
 
-    private static final String START_DEFAULT = "1971-01-01 01:01:01";
-    private static final String END_DEFAULT = "2999-01-01 01:01:01";
-
+    private static final LocalDateTime START_DEFAULT =
+            LocalDateTime.parse("1971-01-01 01:01:01", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+    private static final LocalDateTime END_DEFAULT =
+            LocalDateTime.parse("2999-01-01 01:01:01", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
     @Autowired
     public StatClient(@Value("${stats-server-uri}") String serverUrl, RestTemplateBuilder builder) {
@@ -40,7 +43,8 @@ public class StatClient extends BaseClient {
         return post("/hit", hitDto);
     }
 
-    public List<ViewStatDto> getStat(String start, String end, List<String> uris, boolean unique) {
+
+    public List<ViewStatDto> getStat(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
         if (start == null) {
             start = START_DEFAULT;
         }
