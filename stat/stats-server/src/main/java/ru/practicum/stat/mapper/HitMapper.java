@@ -27,4 +27,18 @@ public class HitMapper {
                 .timeStamp(hitDto.getTimestamp())
                 .build();
     }
+
+//    public static Hit toHit(InputHitDto inputHitDto) {
+//        return Hit.builder()
+//                .id(0L)
+//                .app(inputHitDto.getApp())
+//                .uri(inputHitDto.getUri())
+//                .ip(inputHitDto.getIp())
+//                .timeStamp(inputHitDto.getTimestamp())
+//                .build();
+//    }
+
+
+
+
 }

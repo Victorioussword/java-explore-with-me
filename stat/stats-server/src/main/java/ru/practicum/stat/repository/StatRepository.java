@@ -2,6 +2,7 @@ package ru.practicum.stat.repository;
 
 import java.util.List;
 import java.time.LocalDateTime;
+
 import ru.practicum.stat.model.Hit;
 import ru.practicum.stat.dto.ViewStatDto;
 import org.springframework.stereotype.Repository;
@@ -51,4 +52,6 @@ public interface StatRepository extends JpaRepository<Hit, Long> {
             "order by count(hit.ip) desc")
     List<ViewStatDto> getStatUnUniqueIpNoUris(@Param("start") LocalDateTime start,
                                               @Param("end") LocalDateTime end);
+
+    int countAllBy();
 }

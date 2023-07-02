@@ -24,6 +24,11 @@ public class StatService {
     }
 
 
+    public int getQuantityLog() {
+        return statRepository.countAllBy();
+    }
+
+
     public List<ViewStatDto> getViewStats(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
 
         log.info("StatService - getViewStats(). Получены даты {} и  {}", start.toString(), end.toString());

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 
-import ru.practicum.stat.dto.HitDto;
+import ru.practicum.stat.dto.OutputHitDto;
 import ru.practicum.stat.dto.ViewStatDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,7 +39,7 @@ public class StatClient extends BaseClient {
         );
     }
 
-    public ResponseEntity<Object> saveStat(HitDto hitDto) {
+    public ResponseEntity<Object> saveStat(OutputHitDto hitDto) {
         return post("/hit", hitDto);
     }
 
@@ -51,9 +51,11 @@ public class StatClient extends BaseClient {
         if (end == null) {
             end = END_DEFAULT;
         }
+
+
         Map<String, Object> parameters = Map.of(
-                "start", start,
-                "end", end,
+                "start", start.toString().replace("T", " "),
+                "end", end.toString().replace("T", " "),
                 "uris", uris,
                 "unique", unique
         );

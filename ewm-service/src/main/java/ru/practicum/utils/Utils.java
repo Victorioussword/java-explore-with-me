@@ -2,15 +2,14 @@ package ru.practicum.utils;
 
 import java.util.*;
 import java.time.LocalDateTime;
-
 import lombok.extern.slf4j.Slf4j;
 import ru.practicum.client.StatClient;
 import ru.practicum.event.model.Event;
-import ru.practicum.stat.dto.HitDto;
 import ru.practicum.utils.enums.State;
 import ru.practicum.stat.dto.ViewStatDto;
 import ru.practicum.request.model.Status;
 import ru.practicum.request.model.Request;
+import ru.practicum.stat.dto.OutputHitDto;
 import ru.practicum.category.model.Category;
 import ru.practicum.event.dto.EventInputDto;
 import ru.practicum.utils.enums.StateAction;
@@ -54,14 +53,9 @@ public class Utils {
         Map<Long, Long> idAndViews = new HashMap<>();
 
         for (int i = 0; i < viewStatDtos.size(); i++) {
-     //       List<String> stroki = Arrays.stream(viewStatDtos.get(i).getUri().split("/")).toList();
-
-            //String[] array = {"one", "two", "three"};
-            //ArrayList<String> list = new ArrayList<String>();
-            //Collections.addAll(list, array);
             List<String> stroki = new ArrayList<>();
-            String[] stroks = viewStatDtos.get(i).getUri().split("/");
-            Collections.addAll(stroki, stroks);
+            String[] str = viewStatDtos.get(i).getUri().split("/");
+            Collections.addAll(stroki, str);
             Long id = Long.parseLong(stroki.get(stroki.size() - 1));
             idAndViews.put(id, viewStatDtos.get(i).getHits());
         }
@@ -223,16 +217,18 @@ public class Utils {
 
 
     public static void saveHit(String ip, Long eventId, StatClient statClient) {
-        HitDto hitDto = new HitDto();
-        hitDto.setApp("ewm-service");
-        hitDto.setTimestamp(LocalDateTime.now());
-        hitDto.setIp(ip);
+
+        OutputHitDto outputHitDto = new OutputHitDto();
+        outputHitDto.setApp("ewm-service");
+        String timestamp = LocalDateTime.now().toString().replace("T", " ");
+        outputHitDto.setTimestamp(timestamp);
+        outputHitDto.setIp(ip);
         if (eventId == null) {
-            hitDto.setUri("/events");
+            outputHitDto.setUri("/events");
         } else {
-            hitDto.setUri("/events/" + eventId);
+            outputHitDto.setUri("/events/" + eventId);
         }
-        statClient.saveStat(hitDto);
+        statClient.saveStat(outputHitDto);
         log.info("Utils.saveHit(). Сохранено успешно");
     }
 }
