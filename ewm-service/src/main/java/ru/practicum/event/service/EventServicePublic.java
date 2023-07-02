@@ -1,6 +1,5 @@
 package ru.practicum.event.service;
 
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Comparator;
@@ -28,6 +27,7 @@ import ru.practicum.exceptions.ObjectNotFoundException;
 import ru.practicum.request.repository.RequestRepository;
 import ru.practicum.category.repository.CategoryRepository;
 import org.springframework.transaction.annotation.Transactional;
+
 
 @Slf4j
 @Service
