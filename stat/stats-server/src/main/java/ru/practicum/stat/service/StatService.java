@@ -37,6 +37,7 @@ public class StatService {
         if (unique && uris != null) {
             log.info("StatService - getStat(). Переход в Repository. Start {}, ENd {}, size {}, unique {}", start, end, uris.size(), unique);
             return statRepository.getStatUniqueIpUris(start, end, uris);  // уникальный IP, список ссылок есть
+
         } else if (unique && uris == null) {
             log.info("StatService - getStat(). Переход в Repository. Start {}, ENd {}, size = 0, unique {}", start, end, unique);
             return statRepository.getStatUniqueIpNoUris(start, end);  // // уникальный IP, список ссылок нет

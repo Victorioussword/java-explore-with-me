@@ -14,6 +14,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface StatRepository extends JpaRepository<Hit, Long> {
 
 
+    // уникальный IP, список ссылок есть
     @Query("select new ru.practicum.stat.dto.ViewStatDto (hit.app, hit.uri, count(distinct hit.ip))" +
             "from Hit hit " +
             "where (hit.timeStamp between :start and :end) " +
@@ -25,6 +26,9 @@ public interface StatRepository extends JpaRepository<Hit, Long> {
                                           @Param("uris") List<String> uris);
 
 
+
+
+    // // уникальный IP, список ссылок нет
     @Query("select new ru.practicum.stat.dto.ViewStatDto  (hit.app, hit.uri, count(distinct hit.ip))" +
             "from Hit hit " +
             "where (hit.timeStamp between :start and :end) " +
@@ -34,6 +38,9 @@ public interface StatRepository extends JpaRepository<Hit, Long> {
                                             @Param("end") LocalDateTime end);
 
 
+
+
+    // не уникальный IP, список ссылок есть
     @Query("select new ru.practicum.stat.dto.ViewStatDto  (hit.app, hit.uri, count(hit.ip))" +
             "from Hit hit " +
             "where (hit.timeStamp between :start and :end) " +
@@ -44,7 +51,7 @@ public interface StatRepository extends JpaRepository<Hit, Long> {
                                             @Param("end") LocalDateTime end,
                                             @Param("uris") List<String> uris);
 
-
+    // не уникальный IP, список ссылок нет
     @Query("select new ru.practicum.stat.dto.ViewStatDto  (hit.app, hit.uri, count(hit.ip))" +
             "from Hit hit " +
             "where (hit.timeStamp between :start and :end) " +

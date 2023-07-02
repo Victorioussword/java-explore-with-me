@@ -117,8 +117,9 @@ public class Utils {
             event.setTitle(eventUpdateByAdminDto.getTitle());
         }
 
-        if (eventUpdateByAdminDto.getStateAction() != null && eventUpdateByAdminDto.getStateAction()
-                .equals(StateAction.PUBLISH_EVENT) && event.getState().equals(State.PENDING)) {
+        if (eventUpdateByAdminDto.getStateAction() != null
+                && eventUpdateByAdminDto.getStateAction().equals(StateAction.PUBLISH_EVENT)
+                && event.getState().equals(State.PENDING)) {
             event.setState(State.PUBLISHED);
         }
 
@@ -220,7 +221,7 @@ public class Utils {
 
         OutputHitDto outputHitDto = new OutputHitDto();
         outputHitDto.setApp("ewm-service");
-        String timestamp = LocalDateTime.now().toString().replace("T", " ");
+        String timestamp = LocalDateTime.now().withNano(0).toString().replace("T", " ");
         outputHitDto.setTimestamp(timestamp);
         outputHitDto.setIp(ip);
         if (eventId == null) {
