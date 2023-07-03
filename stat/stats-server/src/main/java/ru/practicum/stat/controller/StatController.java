@@ -2,6 +2,7 @@ package ru.practicum.stat.controller;
 
 import java.util.List;
 import java.time.LocalDateTime;
+
 import lombok.extern.slf4j.Slf4j;
 import ru.practicum.stat.dto.HitDto;
 import lombok.RequiredArgsConstructor;
@@ -25,13 +26,13 @@ public class StatController {
 
         log.info("Количество записей в б.д. до сохранения Hit{}", statsService.getQuantityLog());
         log.info("StatService - addHit(). ДОбавлен Hit {}", hitDto.toString());
-                return HitMapper.toHitDto(statsService.postHit(HitMapper.toHit(hitDto)));
+        return HitMapper.toHitDto(statsService.postHit(HitMapper.toHit(hitDto)));
     }
 
 
     @GetMapping(value = "/stats")
-    public ResponseEntity getViewStats(@RequestParam (required = false ) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime start,
-                                       @RequestParam (required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime end,
+    public ResponseEntity getViewStats(@RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime start,
+                                       @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime end,
                                        @RequestParam(required = false) List<String> uris,
                                        @RequestParam(defaultValue = "false") boolean unique) {
 
