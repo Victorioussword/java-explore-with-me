@@ -34,9 +34,11 @@ public class StatService {
 
         log.info("StatService - getViewStats(). Получены даты {} и  {}", start.toString(), end.toString());
 
-        if (start.isAfter(end)) {
+        if (start == null || end == null || start.isAfter(end)) {
             throw new BadRequestException("Start после End");
         }
+
+
         if (unique && uris != null) {
             log.info("StatService - getStat(). Переход в Repository. Start {}, ENd {}, size {}, unique {}", start, end, uris.size(), unique);
             return statRepository.getStatUniqueIpUris(start, end, uris);  // уникальный IP, список ссылок есть
