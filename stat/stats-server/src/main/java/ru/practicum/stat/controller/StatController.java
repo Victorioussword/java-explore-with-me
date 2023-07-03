@@ -30,6 +30,7 @@ public class StatController {
     }
 
 
+
     @GetMapping(value = "/stats")
     public ResponseEntity getViewStats(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime start,
                                        @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime end,
