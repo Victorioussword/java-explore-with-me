@@ -28,11 +28,6 @@ public class StatController {
                 return HitMapper.toHitDto(statsService.postHit(HitMapper.toHit(hitDto)));
     }
 
-//    GET http://localhost:9090/stats
-//    ?start=2020-05-05 00:00:00
-//    &end=2035-05-05 00:00:00
-//    &uris=/events/103
-//    &unique=false
 
     @GetMapping(value = "/stats")
     public ResponseEntity getViewStats(@RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime start,

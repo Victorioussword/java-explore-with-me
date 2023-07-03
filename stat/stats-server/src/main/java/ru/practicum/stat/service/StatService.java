@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 
 import lombok.extern.slf4j.Slf4j;
 import ru.practicum.stat.dto.ViewStatDto;
+import ru.practicum.stat.exceptions.BadRequestException;
 import ru.practicum.stat.model.Hit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -33,7 +34,9 @@ public class StatService {
 
         log.info("StatService - getViewStats(). Получены даты {} и  {}", start.toString(), end.toString());
 
-
+        if (start.isAfter(end)) {
+            throw new BadRequestException("Start после End");
+        }
         if (unique && uris != null) {
             log.info("StatService - getStat(). Переход в Repository. Start {}, ENd {}, size {}, unique {}", start, end, uris.size(), unique);
             return statRepository.getStatUniqueIpUris(start, end, uris);  // уникальный IP, список ссылок есть
