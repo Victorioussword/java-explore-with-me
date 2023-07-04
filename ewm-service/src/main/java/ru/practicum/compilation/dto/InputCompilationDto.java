@@ -20,7 +20,5 @@ public class InputCompilationDto {
 
     private List<Long> events;
 
-    private Boolean pinned;
-
-
+    private boolean pinned;
 }

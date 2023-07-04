@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.category.dto.InputCategoryDto;
 import ru.practicum.category.model.Category;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -23,14 +25,14 @@ import ru.practicum.category.repository.CategoryRepository;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
     private final EventRepository eventRepository;
 
-
+    @Transactional
     public OutputCategoryDto create(Category category) {
-        checkUniqueName(category.getName());
         log.info("CategoryService - create().  ДОбавлено  {}", category.toString());
         return CategoryMapper.toOutputCategoryDto(categoryRepository.save(category));
     }
@@ -51,10 +53,9 @@ public class CategoryService {
         return cat;
     }
 
-
+    @Transactional
     public void delete(Long id) {
-
-        if (categoryRepository.findById(id).isEmpty()) {
+        if (!categoryRepository.existsById(id)) {
             throw new ObjectNotFoundException("категория с таким id не существует");
         }
         if (eventRepository.countAllByCategoryId(id) != 0L) {
@@ -64,17 +65,17 @@ public class CategoryService {
         log.info("CategoryService - delete().  Удалена категория id {}", id);
     }
 
+    @Transactional
+    public OutputCategoryDto update(InputCategoryDto inputCategoryDto, Long id) {
 
-    public OutputCategoryDto update(Category category, Long id) {
+
         Optional<Category> categoryOptional = categoryRepository.findById(id);
         if (categoryOptional.isEmpty()) {
             throw new ObjectNotFoundException("категория с таким id не существует");
         }
 
-        if (!categoryOptional.get().getName().equals(category.getName())) {
-            checkUniqueName(category.getName());
-        }
-        categoryOptional.get().setName(category.getName());
+
+        categoryOptional.get().setName(inputCategoryDto.getName());
         log.info("CategoryService - update().  Обнолена категория  id = {}, name = {}",
                 id, categoryOptional.get().getName());
         return CategoryMapper.toOutputCategoryDto(categoryOptional.get());
@@ -88,10 +89,9 @@ public class CategoryService {
     }
 
 
-    private void checkUniqueName(String name) {
-        log.info("CategoryService - checkUniqueName().  проверка имени {}", name);
-        if (categoryRepository.findByName(name).isPresent()) {
-            throw new ConflictException("Category с таким именем уже существует");
-        }
-    }
+//    private void checkUniqueName(String name) {
+//        log.info("CategoryService - checkUniqueName().  проверка имени {}", name);
+//        if (categoryRepository.findByName(name).isPresent()) {
+//            throw new ConflictException("Category с таким именем уже существует");
+    ////    }
 }

@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.time.LocalDateTime;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -39,6 +40,14 @@ public class ErrorHandler {
         log.debug("Получен статус 409 Conflict {}",badRequestException.getMessage(), badRequestException);
         return conflict(badRequestException);
     }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ApiError handleDataIntegrityViolationException(final DataIntegrityViolationException dataIntegrityViolationException) {
+        log.debug("Получен статус 409 Conflict {}", dataIntegrityViolationException.getMessage(), dataIntegrityViolationException);
+        return conflict(dataIntegrityViolationException);
+    }
+
 
 
     private ApiError conflict(final Exception exception) {

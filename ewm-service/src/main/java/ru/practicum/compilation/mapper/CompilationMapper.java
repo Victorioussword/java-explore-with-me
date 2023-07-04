@@ -24,7 +24,8 @@ public class CompilationMapper {
     public static Compilation toCompilation(InputCompilationDto inputCompilationDto) {
         return Compilation.builder()
                 .title(inputCompilationDto.getTitle())
-                .pinned(inputCompilationDto.getPinned())
+//                .pinned(inputCompilationDto.getPinned())
+                .pinned(inputCompilationDto.isPinned())
                 .build();
     }
 }

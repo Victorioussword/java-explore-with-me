@@ -1,8 +1,11 @@
 package ru.practicum.category.model;
 
 import lombok.*;
+
 import javax.persistence.*;
+
 import lombok.experimental.SuperBuilder;
+
 import javax.validation.constraints.Size;
 
 @Entity
@@ -21,5 +24,6 @@ public class Category {
     private long id;
 
     @Size(max = 50)
+    @Column(name = "name", unique = true, nullable = false)
     private String name;
 }

@@ -44,7 +44,7 @@ public class CategoryControllerAdmin {
     public OutputCategoryDto update(@RequestBody @Valid InputCategoryDto inputCategoryDto,
                                     @PathVariable Long catId) {
         OutputCategoryDto outputCategoryDto = categoryService
-                .update(CategoryMapper.toCategory(inputCategoryDto), catId);
+                .update(inputCategoryDto, catId);
         log.info("CategoryControllerAdmin - update().  обновлена Category = {}", outputCategoryDto.getName());
         return outputCategoryDto;
     }

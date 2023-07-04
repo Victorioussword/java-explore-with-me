@@ -1,13 +1,10 @@
 package ru.practicum.compilation.service;
 
-import java.util.HashSet;
 import java.util.List;
+import java.util.HashSet;
 import java.util.Optional;
-
 import lombok.extern.slf4j.Slf4j;
-
 import java.util.stream.Collectors;
-
 import lombok.RequiredArgsConstructor;
 import ru.practicum.event.model.Event;
 import org.springframework.stereotype.Service;
@@ -60,9 +57,6 @@ public class CompilationService {
 
         Compilation compilation = CompilationMapper.toCompilation(inputCompilationDto);
 
-        if (inputCompilationDto.getPinned() == null) {
-            compilation.setPinned(false);
-        }
         if (inputCompilationDto.getEvents() == null) {
             compilation.setEvents(new HashSet<>(eventRepository.findAll()));
         } else {
@@ -107,7 +101,7 @@ public class CompilationService {
             compilation.setPinned(inputUpdateCompilationDto.getPinned());
         }
 
-        if (inputUpdateCompilationDto.getTitle() != null) {
+        if (inputUpdateCompilationDto.getTitle() != null && !inputUpdateCompilationDto.getTitle().isBlank()) {
             compilation.setTitle(inputUpdateCompilationDto.getTitle());
         }
 
