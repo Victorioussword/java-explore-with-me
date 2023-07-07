@@ -1,23 +1,30 @@
 package ru.practicum.event.service;
 
+import java.util.Map;
 import java.util.List;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.time.LocalDateTime;
 
 import ru.practicum.event.dto.*;
-import ru.practicum.utils.Utils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import java.util.stream.Collectors;
+
 import ru.practicum.user.model.User;
 import ru.practicum.utils.enums.State;
 import ru.practicum.event.model.Event;
 import ru.practicum.client.StatClient;
 import ru.practicum.request.model.Status;
+import ru.practicum.utils.enums.StateAction;
 import ru.practicum.category.model.Category;
 import ru.practicum.event.Mapper.EventMapper;
 import org.springframework.stereotype.Service;
+import ru.practicum.event.model.CountRequests;
+
+import static java.util.stream.Collectors.toMap;
+
 import ru.practicum.exceptions.ConflictException;
 import ru.practicum.user.repository.UserRepository;
 import org.springframework.data.domain.PageRequest;
@@ -34,6 +41,8 @@ import ru.practicum.category.repository.CategoryRepository;
 public class EventServiceAdmin {
 
     private final StatClient statClient;
+
+    StatisticService statisticService;
 
     private final UserRepository userRepository;
 
@@ -90,22 +99,47 @@ public class EventServiceAdmin {
                         dateEndSearch,
                         PageRequest.of(from, size));
 
+
         if (events.isEmpty()) {
             events.addAll(eventRepository.findAllBy(PageRequest.of(from, size)));
         }
-        log.info("EventServicePrivate -  getEventsByAdmin() Возвращен список {}", events.size());
+        log.info("EventServicePrivate -  getEventsByAdmin() найден список из {} элементов ", events.size());
 
-        return events.stream()
+        List<EventDto> eventDtos = events.stream()
                 .map(EventMapper::toEventDto)
-                .peek(eventDto -> eventDto.setConfirmedRequests(requestRepository
-                        .countByEventIdAndStatus(eventDto.getId(), Status.CONFIRMED)))
-                .peek(eventDto -> {
-
-                    eventDto
-                            .setViews(Utils.getViews(rangeStart, rangeEnd, "/events/" + eventDto.getId(), false, statClient));
-
-                })
                 .collect(Collectors.toList());
+
+        List<String> urises = new ArrayList<>();
+        for (int i = 0; i < eventDtos.size(); i++) {
+            urises.add("/events/" + eventDtos.get(i).getId());
+        }
+
+        Map<Long, Long> counts = statisticService.getViews2(
+                rangeStart,
+                rangeEnd,
+                urises,
+                false,
+                statClient);
+        log.info("EventServicePrivate -  getEventsByAdmin() ПОдготовлена информация о запросах - {} ", counts.size());
+
+        for (int i = 0; i < eventDtos.size(); i++) {
+            if (counts.size() == 0)
+                eventDtos.get(i).setViews(0L);
+            else {
+                eventDtos.get(i).setViews(counts.get(eventDtos.get(i).getId()));
+            }
+        }
+        Map<Long, Long> eventToCount = requestRepository.getCountOfRequests(events, Status.CONFIRMED).stream()
+                .collect(toMap(CountRequests::getEventId, CountRequests::getCountOfRequests));
+
+        for (int i = 0; i < eventDtos.size(); i++) {
+            if (eventToCount.get(eventDtos.get(i).getId()) == null) {
+                eventDtos.get(i).setConfirmedRequests(0L);
+            } else {
+                eventDtos.get(i).setConfirmedRequests(eventToCount.get(eventDtos.get(i).getId()));
+            }
+        }
+        return eventDtos;
     }
 
 
@@ -121,12 +155,72 @@ public class EventServiceAdmin {
         if (!event.getState().equals(State.PENDING)) {
             throw new ConflictException("Обновление State не доступно.");
         }
-        event = Utils.prepareEventAdm(eventUpdateByAdminDto, event, categoryRepository, eventRepository);
+        event = prepareEventAdm(eventUpdateByAdminDto, event);
 
         EventDto eventDto = EventMapper.toEventDto(event);
 
-        eventDto.setViews(Utils.getViews(null, null, "/events/" + eventId, false, statClient));
+        Map<Long, Long> vies = statisticService.getViews2(null, null, List.of("/events/" + eventId), false, statClient);
+
+        eventDto.setViews(vies.get(eventDto.getId()));
         log.info("EventServicePrivate -  updateEvent(). Обновлено {}", eventDto.toString());
         return eventDto;
+    }
+
+
+    private Event prepareEventAdm(EventUpdateByAdminDto eventUpdateByAdminDto, Event event) {
+
+        log.info("Utils.prepareEvent - Начало метода: \n {} \n {} ", eventUpdateByAdminDto, event);
+
+        if (eventUpdateByAdminDto.getAnnotation() != null && !eventUpdateByAdminDto.getAnnotation().isBlank()) {
+            event.setAnnotation(eventUpdateByAdminDto.getAnnotation());
+        }
+
+        if (eventUpdateByAdminDto.getCategory() != null) {
+            event.setCategory(categoryRepository.findById(eventUpdateByAdminDto.getCategory()).orElseThrow(() ->
+                    new ObjectNotFoundException("Категория с таким id не существует")));
+        }
+
+        if (eventUpdateByAdminDto.getDescription() != null && !eventUpdateByAdminDto.getDescription().isBlank()) {
+            event.setDescription(eventUpdateByAdminDto.getDescription());
+        }
+
+        if (eventUpdateByAdminDto.getEventDate() != null) {
+            event.setEventDate(eventUpdateByAdminDto.getEventDate());
+        }
+
+        if (eventUpdateByAdminDto.getLocation() != null) {
+            event.setLocation(eventUpdateByAdminDto.getLocation());
+        }
+
+        if (eventUpdateByAdminDto.getPaid() != null) {
+            event.setPaid(eventUpdateByAdminDto.getPaid());
+        }
+
+        if (eventUpdateByAdminDto.getParticipantLimit() != null) {
+            event.setParticipantLimit(eventUpdateByAdminDto.getParticipantLimit());
+        }
+
+        if (eventUpdateByAdminDto.getRequestModeration() != null) {
+            event.setRequestModeration(eventUpdateByAdminDto.getRequestModeration());
+        }
+
+        if (eventUpdateByAdminDto.getTitle() != null && !eventUpdateByAdminDto.getTitle().isBlank()) {
+            event.setTitle(eventUpdateByAdminDto.getTitle());
+        }
+
+        if (eventUpdateByAdminDto.getStateAction() != null
+                && eventUpdateByAdminDto.getStateAction().equals(StateAction.PUBLISH_EVENT)
+                && event.getState().equals(State.PENDING)) {
+            event.setState(State.PUBLISHED);
+        }
+
+        if (eventUpdateByAdminDto.getStateAction() != null && eventUpdateByAdminDto.getStateAction()
+                .equals(StateAction.REJECT_EVENT) && !event.getState().equals(State.PUBLISHED)) {
+            event.setState(State.CANCELED);
+        }
+
+        event = eventRepository.save(event);
+        log.info("Utils.prepareEventAdm() - Возвращено: {}", event);
+        return event;
     }
 }

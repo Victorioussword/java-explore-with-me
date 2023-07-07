@@ -22,12 +22,11 @@ public class EventControllerAdmin {
 
     private final EventServiceAdmin eventServiceAdmin;
 
-
     @GetMapping
     public List<EventDto> getEventsByAdmin(
 
-            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeStart,      // todo - теперь принимаем время
-            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeEnd,         // todo - теперь принимаем время
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeStart,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeEnd,
             @RequestParam(required = false) List<Long> users,
             @RequestParam(required = false) List<Long> categories,
             @RequestParam(required = false) List<String> states,

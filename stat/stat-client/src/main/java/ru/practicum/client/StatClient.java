@@ -23,10 +23,12 @@ import java.util.Map;
 @Slf4j
 public class StatClient extends BaseClient {
 
+    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
     private static final LocalDateTime START_DEFAULT =
-            LocalDateTime.parse("1971-01-01 01:01:01", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            LocalDateTime.parse("1971-01-01 01:01:01", dateTimeFormatter);
     private static final LocalDateTime END_DEFAULT =
-            LocalDateTime.parse("2999-01-01 01:01:01", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            LocalDateTime.parse("2999-01-01 01:01:01", dateTimeFormatter);
 
     @Autowired
     public StatClient(@Value("${stats-server-uri}") String serverUrl, RestTemplateBuilder builder) {

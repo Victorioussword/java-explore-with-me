@@ -3,7 +3,8 @@ package ru.practicum.request.service;
 
 import java.util.List;
 import java.time.LocalDateTime;
-import ru.practicum.utils.Utils;
+
+import lombok.extern.slf4j.Slf4j;
 import java.util.stream.Collectors;
 import ru.practicum.user.model.User;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,9 @@ import ru.practicum.event.repository.EventRepository;
 import ru.practicum.exceptions.ObjectNotFoundException;
 import ru.practicum.request.repository.RequestRepository;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.utils.enums.State;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class RequestService {
@@ -38,7 +41,7 @@ public class RequestService {
 
         Event event = eventRepository.findById(eventId).orElseThrow(() -> new ObjectNotFoundException("Event не найден"));
 
-        Utils.checkRequest(event, userId, requestRepository);
+        checkRequest(event, userId);
 
         List<Request> checkExistingRequest = requestRepository.findAllByRequesterIdAndEventId(userId, eventId);
 
@@ -82,4 +85,23 @@ public class RequestService {
 
         return RequestMapper.toRequestDto(request);
     }
+
+
+    private void checkRequest(Event event, Long userId) {
+        log.info("Utils.checkRequest. НАчало проверки");
+        if (event.getInitiator().getId() == userId) {
+            throw new ConflictException("User не может создать на событие. User - создатель события");
+        }
+        if (event.getState().equals(State.PENDING) || event.getState().equals(State.CANCELED)) {
+            throw new ConflictException("Event не опубликовано");
+        }
+        if (event.getParticipantLimit() != 0) {
+            Long countRequest = requestRepository.countByEventId(event.getId());
+            if (event.getParticipantLimit() <= countRequest) {
+                throw new ConflictException("Превышено количество запросов");
+            }
+        }
+        log.info("Utils.checkRequest(). Проверка пройдена.");
+    }
+
 }

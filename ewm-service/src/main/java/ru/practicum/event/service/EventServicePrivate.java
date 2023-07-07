@@ -3,22 +3,19 @@ package ru.practicum.event.service;
 import java.util.List;
 import java.util.ArrayList;
 import java.time.LocalDateTime;
-
-import lombok.RequiredArgsConstructor;
-import ru.practicum.utils.Utils;
 import lombok.extern.slf4j.Slf4j;
-
 import java.util.stream.Collectors;
-
 import ru.practicum.user.model.User;
 import ru.practicum.utils.enums.State;
 import ru.practicum.event.model.Event;
+import lombok.RequiredArgsConstructor;
 import ru.practicum.event.dto.EventDto;
 import ru.practicum.request.model.Status;
 import ru.practicum.request.model.Request;
 import ru.practicum.user.dto.UserShortDto;
 import ru.practicum.user.mapper.UserMapper;
 import ru.practicum.request.dto.RequestDto;
+import ru.practicum.utils.enums.StateAction;
 import ru.practicum.category.model.Category;
 import ru.practicum.event.dto.EventShortDto;
 import ru.practicum.event.dto.EventInputDto;
@@ -39,6 +36,7 @@ import ru.practicum.category.repository.CategoryRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -55,7 +53,7 @@ public class EventServicePrivate {
 
     public EventDto create(EventInputDto eventInputDto, Long userId) {
 
-        Utils.checkEventDateDeforeCreate(eventInputDto);
+        checkEventDateDeforeCreate(eventInputDto);
 
         Category category = categoryRepository.findById(eventInputDto.getCategory()).orElseThrow(() ->
                 new ObjectNotFoundException("категория с таким id не существует"));
@@ -64,7 +62,7 @@ public class EventServicePrivate {
 
         Event event = EventMapper.toEvent(eventInputDto, category, user);
 
-            event.setPaid(eventInputDto.isPaid());
+        event.setPaid(eventInputDto.isPaid());
 
         if (eventInputDto.getParticipantLimit() == null) {
             event.setParticipantLimit(0L);
@@ -122,7 +120,7 @@ public class EventServicePrivate {
         if (event.getState().equals(State.PUBLISHED)) {
             throw new ConflictException("Обновление события не возможно.");
         }
-        event = Utils.prepareEventforPrivate(dto, event, categoryRepository, eventRepository);
+        event = prepareEventforPrivate(dto, event);
         EventDto eventDto = EventMapper.toEventDto(event);
 
         log.info("EventServicePrivate - getRequestsForEvent() Возвращено {}", eventDto.toString());
@@ -176,10 +174,10 @@ public class EventServicePrivate {
 
             int canceled = 0;
 
-            int maxPart = Utils.maxPartCount(event.getParticipantLimit(), requests.size());
+            int maxPart = maxPartCount(event.getParticipantLimit(), requests.size());
 
             for (int i = canceled; i < requests.size(); i++) {
-                Utils.isStatusConfirmed(requests.get(i));
+                isStatusConfirmed(requests.get(i));
                 requests.get(i).setStatus(Status.REJECTED);
                 rejRequestsDtos.add(RequestMapper.toRequestDto(requests.get(i)));
             }
@@ -192,7 +190,7 @@ public class EventServicePrivate {
 
         } else {
             for (int i = 0; i < requests.size(); i++) {
-                Utils.isStatusConfirmed(requests.get(i));
+                isStatusConfirmed(requests.get(i));
                 requests.get(i).setStatus(Status.REJECTED);
                 rejRequestsDtos.add(RequestMapper.toRequestDto(requests.get(i)));
             }
@@ -203,4 +201,71 @@ public class EventServicePrivate {
 
         return new RequestsListsDto(confRequestsDtos, rejRequestsDtos);
     }
+
+    public Event prepareEventforPrivate(EventUpdateByUserDto dto,
+                                        Event event) {
+        if (dto.getAnnotation() != null && !dto.getAnnotation().isBlank()) {    // todo добавил isBlank.
+            event.setAnnotation(dto.getAnnotation());
+        }
+        if (dto.getCategory() != null) {
+
+            Category category = categoryRepository.findById(dto.getCategory()).orElseThrow(() ->
+                    new ObjectNotFoundException("категория с таким id не существует"));
+            event.setCategory(category);
+        }
+        if (dto.getDescription() != null && !dto.getDescription().isBlank()) {  // todo добавил isBlank.
+            event.setDescription(dto.getDescription());
+        }
+        if (dto.getEventDate() != null) {
+            event.setEventDate(dto.getEventDate());
+        }
+        if (dto.getLocation() != null) {
+            event.setLocation(dto.getLocation());
+        }
+        if (dto.getPaid() != null) {
+            event.setPaid(dto.getPaid());
+        }
+        if (dto.getParticipantLimit() != null) {
+            event.setParticipantLimit(dto.getParticipantLimit());
+        }
+        if (dto.getRequestModeration() != null) {
+            event.setRequestModeration(dto.getRequestModeration());
+        }
+        if (dto.getTitle() != null && !dto.getTitle().isBlank()) {   // todo добавил isBlank.
+            event.setTitle(dto.getTitle());
+        }
+        if (dto.getStateAction() != null && dto.getStateAction().equals(StateAction.SEND_TO_REVIEW)) {
+            event.setState(State.PENDING);
+        }
+        if (dto.getStateAction() != null && dto.getStateAction().equals(StateAction.CANCEL_REVIEW)) {
+            event.setState(State.CANCELED);
+        }
+        event = eventRepository.save(event);
+        log.info("Utils. prepareEventforPrivate() - Возвращено: {}", event);
+        return event;
+    }
+
+
+    private int maxPartCount(Long a, int b) {
+        int max;
+        if (a <= b) max = a.intValue();
+        else max = b;
+        return max;
+    }
+
+
+    private void checkEventDateDeforeCreate(EventInputDto eventInputDto) {
+
+        if (eventInputDto.getEventDate().isBefore(LocalDateTime.now()) ||
+                eventInputDto.getEventDate().isBefore(LocalDateTime.now().plusHours(2L))) {
+            throw new ConflictException("EventDate должно быть в будущем. До события должно быть не менее 2 часов");
+        }
+    }
+
+    private void isStatusConfirmed(Request request) {
+        if (request.getStatus().equals(Status.CONFIRMED)) {
+            throw new ConflictException("Status не возможно изменить.");
+        }
+    }
+
 }

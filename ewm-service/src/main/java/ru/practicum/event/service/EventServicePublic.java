@@ -1,22 +1,19 @@
 package ru.practicum.event.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Comparator;
-import java.time.LocalDateTime;
-
-import lombok.RequiredArgsConstructor;
-import ru.practicum.utils.Utils;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.time.LocalDateTime;
+import lombok.extern.slf4j.Slf4j;
 import java.util.stream.Collectors;
-
+import lombok.RequiredArgsConstructor;
 import ru.practicum.utils.enums.State;
 import ru.practicum.event.model.Event;
 import ru.practicum.client.StatClient;
 import ru.practicum.event.dto.EventDto;
-
+import ru.practicum.request.model.Status;
 import ru.practicum.event.dto.EventShortDto;
 import ru.practicum.event.Mapper.EventMapper;
 import org.springframework.stereotype.Service;
@@ -38,6 +35,8 @@ public class EventServicePublic {
 
     private final EventRepository eventRepository;
 
+    private final StatisticService statisticService;
+
     private final RequestRepository requestRepository;
 
     private final CategoryRepository categoryRepository;
@@ -50,7 +49,7 @@ public class EventServicePublic {
             throw new ObjectNotFoundException("Event не опубликован");
         }
         EventDto eventDto = EventMapper.toEventDto(event);
-        Utils.saveHit(ip, id, statClient);
+        statisticService.saveHit(ip, id, statClient);
         if (eventDto.getViews() == null) {
             eventDto.setViews(1L);
         } else {
@@ -103,21 +102,24 @@ public class EventServicePublic {
         // сортировка по доступности
         if (onlyAvailable) {
             events = events.stream()
-                    .filter(event -> event.getParticipantLimit() > Utils.confirmedRequests(event.getId(), requestRepository))
+                    .filter(event -> event.getParticipantLimit() > confirmedRequests(event.getId(), requestRepository))
                     .collect(Collectors.toList());
         }
 
         log.info("Завершен поиск и сортировка Event");
 
+
         List<EventShortDto> eventShortDtos2 = events.stream()
                 .map(EventMapper::toShortDto).collect(Collectors.toList());  // без простмотров
+
 
         List<String> urises = new ArrayList<>();   // список ссылок для отправки
         for (int i = 0; i < eventShortDtos2.size(); i++) {
             urises.add("/events/" + eventShortDtos2.get(i).getId());
         }
 
-        Map<Long, Long> counts = Utils.getViews2(
+
+        Map<Long, Long> counts = statisticService.getViews2(
                 rangeStart,
                 rangeEnd,
                 urises,
@@ -135,10 +137,14 @@ public class EventServicePublic {
                     .sorted(Comparator.comparing(EventShortDto::getViews));
         }
         log.info("Попытка сохранения Hit");
-        Utils.saveHit(ip, null, statClient);
+        statisticService.saveHit(ip, null, statClient);
         log.info("Utils.saveHit - Done");
 
         log.info("EventServicePrivate - searchEvent() Возвращено список из   {} элементов", eventShortDtos2.size());
         return eventShortDtos2;
+    }
+
+    private Long confirmedRequests(Long eventId, RequestRepository requestRepository) {
+        return requestRepository.countByEventIdAndStatus(eventId, Status.CONFIRMED);
     }
 }
