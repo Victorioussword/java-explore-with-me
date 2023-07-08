@@ -1,45 +1,56 @@
 package ru.practicum.stat.service;
 
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+import java.time.LocalDateTime;
+
 import lombok.extern.slf4j.Slf4j;
+import ru.practicum.stat.dto.ViewStatDto;
+import ru.practicum.stat.exceptions.BadRequestException;
+import ru.practicum.stat.model.Hit;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.stat.dto.InputHitDto;
-import ru.practicum.stat.dto.OutputHitDto;
-import ru.practicum.stat.model.ViewStat;
-import ru.practicum.stat.mapper.HitMapper;
 import ru.practicum.stat.repository.StatRepository;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
-@Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Slf4j
 public class StatService {
-
     private final StatRepository statRepository;
 
-    @Transactional
-    public OutputHitDto postHit(InputHitDto inputHitDto) {
-        log.info("StatService - postHit(). Создан {}", inputHitDto.toString());
-        return HitMapper.toOutputHitDto(statRepository.save(HitMapper.toHit(inputHitDto)));
+    public Hit postHit(Hit hit) {
+
+        log.info("StatService - addHit(). ДОбавлен Hit {}", hit.toString());
+
+        return statRepository.save(hit);
     }
 
-    public List<ViewStat> getStat(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
+
+    public int getQuantityLog() {
+        return statRepository.countAllBy();
+    }
+
+
+    public List<ViewStatDto> getViewStats(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
+
+        log.info("StatService - getViewStats(). Получены даты {} и  {}", start.toString(), end.toString());
+
+        if (start == null || end == null || start.isAfter(end)) {
+            throw new BadRequestException("Start после End");
+        }
+
 
         if (unique && uris != null) {
-            log.info("StatService - getStat(). Start {}, ENd {}, size {}, unique {}", start, end, uris.size(), unique);
+            log.info("StatService - getStat(). Переход в Repository. Start {}, ENd {}, size {}, unique {}", start, end, uris.size(), unique);
             return statRepository.getStatUniqueIpUris(start, end, uris);  // уникальный IP, список ссылок есть
+
         } else if (unique && uris == null) {
-            log.info("StatService - getStat(). Start {}, ENd {}, size = 0, unique {}", start, end, unique);
+            log.info("StatService - getStat(). Переход в Repository. Start {}, ENd {}, size = 0, unique {}", start, end, unique);
             return statRepository.getStatUniqueIpNoUris(start, end);  // // уникальный IP, список ссылок нет
         } else if (!unique && uris != null) {
-            log.info("StatService - getStat(). Start {}, ENd {}, size {}, unique {}", start, end, uris.size(), unique);
+            log.info("StatService - getStat(). Переход в Repository. Start {}, ENd {}, size {}, unique {}", start, end, uris.size(), unique);
             return statRepository.getStatUnUniqueIpUris(start, end, uris);  // не уникальный IP, список ссылок есть
         } else {
-            log.info("StatService - getStat(). Start {}, ENd {}, size = 0, unique {}", start, end, unique);
+            log.info("StatService - getStat(). Переход в Repository. Start {}, ENd {}, size = 0, unique {}", start, end, unique);
             return statRepository.getStatUnUniqueIpNoUris(start, end);  // не уникальный IP, список ссылок нет
         }
     }

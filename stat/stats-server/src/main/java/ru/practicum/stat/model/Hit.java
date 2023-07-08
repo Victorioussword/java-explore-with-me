@@ -1,34 +1,32 @@
 package ru.practicum.stat.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity
 @Setter
 @Getter
-@AllArgsConstructor
+@Entity
+@Builder
+@ToString
 @NoArgsConstructor
-@Table(name = "hits")
+@AllArgsConstructor
+@Table(name = "hit")
+
 public class Hit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, name = "app")
     private String app;
 
-    @Column(nullable = false, name = "uri")
     private String uri;
 
-    @Column(nullable = false, name = "ip")
     private String ip;
 
-    @Column(nullable = false, name = "timestamp")
-    private LocalDateTime timestamp;
+    @Column(name = "timestamp")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime timeStamp;
 }
