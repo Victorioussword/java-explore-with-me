@@ -35,9 +35,9 @@ public class Comment {
     @JoinColumn(name = "event_id")
     private Event event;
 
-    @Column(name = "createTime")
+    @Column(name = "create_Time")
     private LocalDateTime createTime;
 
-    @Column(name = "updateTime")
+    @Column(name = "update_Time")
     private LocalDateTime updateTime;
 }
