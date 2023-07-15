@@ -19,26 +19,31 @@ public class CommentsController {
 
     private final CommentsService commentsService;
 
+    private final String NAME_OF_CLASS = "CommentsController";
+    private final String METHOD_DEL_COMMENT = " - delComment";
+    private final String METHOD_CREATE_COMMENT = " - createComment";
+    private final String METHOD_GET_COMMENTS_BY_EVENT = " - getCommentsByEvent";
+    private final String METHOD_GET_COMMENT_BY_USER = " - getCommentsByUser";
+    private final String METHOD_UPDATE_COMMENT = " - updateComment";
+
+
     @PostMapping()
     public CommentDtoOutput createComment(
             @RequestBody @Valid CommentDtoInput commentDtoInput,
             @RequestParam Long creatorId,
             @RequestParam Long eventId) {
-
-        CommentDtoOutput commentDtoForReturn = commentsService.create(commentDtoInput, creatorId, eventId);
-        log.info("CommentService - createComment.  Создан Comment {} ", commentDtoForReturn.toString());
-        return commentDtoForReturn;
+        log.info(NAME_OF_CLASS + METHOD_CREATE_COMMENT);
+        return commentsService.create(commentDtoInput, creatorId, eventId);
     }
 
 
     @DeleteMapping("/{commentId}/user/{userId}")
     public void delComment(@PathVariable Long commentId,
                            @PathVariable Long userId) {
-
-
+        log.info(NAME_OF_CLASS + METHOD_DEL_COMMENT);
         commentsService.delComment(commentId, userId);
-        log.info("CommentService - delComment().  Удален Comment # {} ", userId);
     }
+
 
     @GetMapping("/event/{eventId}")
     public List<CommentDtoOutput> getCommentsByEvent(
@@ -46,10 +51,8 @@ public class CommentsController {
             @PathVariable Long eventId,
             @RequestParam(name = "from", defaultValue = "0") int from,
             @RequestParam(name = "size", defaultValue = "10") int size) {
-
-        List<CommentDtoOutput> commentDtoOutputs = commentsService.getComments(eventId, from, size);
-        log.info("CommentService - getComments().  Возвращен список из {} элеменов ", commentDtoOutputs.size());
-        return commentDtoOutputs;
+        log.info(NAME_OF_CLASS + METHOD_GET_COMMENTS_BY_EVENT);
+        return commentsService.getComments(eventId, from, size);
     }
 
 
@@ -58,10 +61,8 @@ public class CommentsController {
             @PathVariable Long userId,
             @RequestParam(name = "from", defaultValue = "0") int from,
             @RequestParam(name = "size", defaultValue = "10") int size) {
-
-        List<CommentDtoOutput> commentDtoOutputs = commentsService.getCommentsByUser(userId, from, size);
-        log.info("CommentService - getComments().  Возвращен список из {} элеменов ", commentDtoOutputs.size());
-        return commentDtoOutputs;
+        log.info(NAME_OF_CLASS + METHOD_GET_COMMENT_BY_USER);
+        return commentsService.getCommentsByUser(userId, from, size);
     }
 
 
@@ -69,9 +70,7 @@ public class CommentsController {
     public CommentDtoOutput updateComment(@RequestBody @Valid CommentDtoUpdate commentDtoUpdate,
                                           @PathVariable Long commentId,
                                           @PathVariable Long userId) {
-
-        CommentDtoOutput commentDtoOutput = commentsService.update(commentDtoUpdate, commentId, userId);
-        log.info("CommentService - updateComment().  Обновлен комметнарий {}", commentDtoOutput.toString());
-        return commentDtoOutput;
+        log.info(NAME_OF_CLASS + METHOD_UPDATE_COMMENT);
+        return commentsService.update(commentDtoUpdate, commentId, userId);
     }
 }

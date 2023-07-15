@@ -33,6 +33,8 @@ public class CommentsService {
     private final EventRepository eventRepository;
     private final CommentRepository commentRepository;
 
+    private final static String NAME_OF_CLASS = "CommentService";
+
     public CommentDtoOutput create(CommentDtoInput commentDtoInput, Long creatorId, Long eventId) {
         Comment comment = CommentMapper.toComment(commentDtoInput);
 
@@ -52,7 +54,7 @@ public class CommentsService {
         comment.setEvent(optionalEvent.get());
 
         CommentDtoOutput commentDtoOutput = CommentMapper.toCommentDtoOutput(commentRepository.save(comment));
-        log.info("CommentsService - create().  Создан комментарий {}.", commentDtoOutput.toString());
+        log.info(NAME_OF_CLASS + " - create().  Создан комментарий {}.", commentDtoOutput.toString());
 
         return commentDtoOutput;
     }
@@ -64,7 +66,7 @@ public class CommentsService {
             throw new ObjectNotFoundException("User не найден");
         }
         commentRepository.deleteById(commentId);
-        log.info("CommentsService - delComment().  удален комментарий {}.", commentId);
+        log.info(NAME_OF_CLASS + " - delComment().  Удален комментарий {}.", commentId);
     }
 
     public List<CommentDtoOutput> getComments(Long eventId, int from, int size) {
@@ -76,7 +78,7 @@ public class CommentsService {
         }
 
         List<Comment> comments = commentRepository.findAllByEvent(optionalEvent.get(), PageRequest.of(from, size));
-        log.info("CommentsService - getComments().  Возвращен список {}.", comments.size());
+        log.info(NAME_OF_CLASS + " - getComments().  Возвращен список {}.", comments.size());
 
         return comments.stream().map(CommentMapper::toCommentDtoOutput).collect(Collectors.toList());
 
@@ -94,14 +96,14 @@ public class CommentsService {
         comment.setText(commentDtoUpdate.getText());
         comment.setUpdateTime(LocalDateTime.now());
 
-        log.info("CommentsService - update().  Обновлен комментарий {}.", comment.toString());
+        log.info(NAME_OF_CLASS + " - update().  Обновлен комментарий {}.", comment.toString());
         return CommentMapper.toCommentDtoOutput(comment);
     }
 
     public List<CommentDtoOutput> getCommentsByUser(Long userId, int from, int size) {
         User user = userRepository.findById(userId).orElseThrow(() -> new ObjectNotFoundException("USer с Id = " + userId + " не обнаружен"));
         List<Comment> comments = commentRepository.findAllByCreator(user, PageRequest.of(from, size));
-        log.info("CommentsService - getCommentsByUser().  Возвращен список {}.", comments.size());
+        log.info(NAME_OF_CLASS + " - getCommentsByUser().  Возвращен список {}.", comments.size());
         return comments.stream().map(CommentMapper::toCommentDtoOutput).collect(Collectors.toList());
     }
 }
