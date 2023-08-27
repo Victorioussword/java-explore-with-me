@@ -5,6 +5,8 @@
 Explore With Me - соц. сеть для обмена информацией о событиях
 Стек: REST-сервис с использованием Spring Boot, Maven, Lombok, Doker, PostgreSQL
 
+Сервис позволяет позволит пользователям делиться информацией об интересных событиях и находить компанию для участия в них.
+Собирает статистику запосов информации о событиях.
 
 
 Многомодульный проект состоящий из:
@@ -17,7 +19,10 @@ Explore With Me - соц. сеть для обмена информацией о
   Хранение информации осуществляется в базах данных PostreSQL запущенных в Docker-контейнерах.
 
 ### Ссылки для ревьюера:
-[сервис статистики](https://github.com/Victorioussword/java-explore-with-me/pull/3)
+
+[Сервис статистики](https://github.com/Victorioussword/java-explore-with-me/pull/3)
+
 [Основной сервис](https://github.com/Victorioussword/java-explore-with-me/pull/4)
-[фича](https://github.com/Victorioussword/java-explore-with-me/pull/5)
+
+[Фича](https://github.com/Victorioussword/java-explore-with-me/pull/5)
 
